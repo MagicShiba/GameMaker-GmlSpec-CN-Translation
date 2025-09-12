@@ -1,0 +1,22 @@
+struct	结构
+animation curve	动画曲线
+asset	资源
+function	函数
+listener	侦听器
+This function	此函数
+solid	固体
+persistent	持久
+absolute	绝对
+relative	相对
+destroy	销毁
+surface	表面
+handle	句柄
+viewport	视口
+game room	游戏房间
+sprite	精灵
+primitive	图元
+fixtures	固定装置
+motor	马达
+camera	摄像机
+track	轨道
+SDF Effects	SDF 效果
