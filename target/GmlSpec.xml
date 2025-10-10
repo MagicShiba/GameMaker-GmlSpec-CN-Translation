@@ -2369,6 +2369,15 @@
 			<Description>此函数可以用来检索一个层上的tile map元素的唯一ID值。注意，此函数是专门设计用于已添加到IDE中的tilemap的，就像您通过使用layer_tilemap_create()函数的代码将tilemap添加到一个层中，那么它将返回添加的tilemap元素的唯一ID。如果给定的tilemap ID不正确或tilemap不存在，此函数将返回-1。</Description>
 			<Parameter Name="layer_id" Optional="false" Type="String,Id.Layer">目标图层的唯一ID值(或字符串形式的图层名称)</Parameter>
 		</Function>
+		<Function Deprecated="false" Name="layer_tilemap_get_colmask" Pure="true" ReturnType="Asset.GMSprite">
+			<Description>此函数可用于检索作为此tilemap碰撞遮罩使用的精灵。</Description>
+			<Parameter Name="tilemap_element_id" Optional="false" Type="Id.TileMapElement">您想知道的tilemap元素的colmask(碰撞遮罩)的ID。</Parameter>
+		</Function>
+		<Function Deprecated="false" Name="layer_tilemap_set_colmask" Pure="false" ReturnType="Real">
+			<Description>此函数可用于设置用作此图块地图碰撞遮罩的精灵。精灵的尺寸必须与用于图块集的精灵的尺寸匹配。如果该函数成功，将返回 0；如果失败，将返回 -1。</Description>
+			<Parameter Name="tilemap_element_id" Optional="false" Type="Id.TileMapElement">您想知道的tilemap元素的colmask(碰撞遮罩)的ID。</Parameter>
+			<Parameter Name="index" Optional="false" Type="Asset.GMSprite">要使用的精灵的碰撞遮罩索引</Parameter>
+		</Function>
 		<Function Deprecated="false" Name="tilemap_clear" Pure="false" ReturnType="Undefined">
 			<Description>使用此函数你可以清除/设置一个给定tiles上的所有tile-map。默认值为0将清除该层中的所有tile(本质上是使所有tile为&quot;空&quot;)，而你可以使用专用的tile_*函数创建自己的tile数据来清除tile地图。</Description>
 			<Parameter Name="tilemap_element_id" Optional="false" Type="Id.TileMapElement">要更改的tilemap元素的唯一ID值</Parameter>
@@ -6319,6 +6328,10 @@
 			<Description>这个函数用于检索给定顶点格式的信息。</Description>
 			<Parameter Name="format_id" Optional="false" Type="Id.VertexFormat">应该检索其信息的顶点格式。</Parameter>
 		</Function>
+		<Function Deprecated="false" Name="vertex_format_exists" Pure="false" ReturnType="Bool">
+			<Description>此函数将检查给定的顶点格式是否存在于内存中。如果存在，则该函数返回 true，否则返回 false。</Description>
+			<Parameter Name="format_id" Optional="false" Type="Id.VertexFormat"/>
+		</Function>
 		<Function Deprecated="false" Name="vertex_freeze" Pure="false" ReturnType="Undefined">
 			<Description>此函数可以用来&quot;冻结&quot;一个顶点缓冲区。此缓冲区变为只读，这意味着如果您需要更改它，则必须删除整个缓冲区并重新创建它。冻结的缓冲区可以比正常的动态缓冲区更快地提交到着色器，建议用于那些在关卡或游戏期间需要不变的自定义图元的效果。</Description>
 			<Parameter Name="buffer" Optional="false" Type="Id.VertexBuffer">要冻结的缓冲区。</Parameter>
@@ -6378,6 +6391,10 @@
 			<Parameter Name="byte" Optional="false" Type="Real">第二个输入值。</Parameter>
 			<Parameter Name="byte" Optional="false" Type="Real">第三个输入值。</Parameter>
 			<Parameter Name="byte" Optional="false" Type="Real">第四个输入值。</Parameter>
+		</Function>
+		<Function Deprecated="false" Name="vertex_buffer_exists" Pure="true" ReturnType="Bool">
+			<Description>此函数检查给定的缓冲区是否存在于内存中或不存在。如果是，函数将返回true，否则将返回false。</Description>
+			<Parameter Name="buffer" Optional="false" Type="Id.VertexBuffer">要检查的缓冲区的索引。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="draw_enable_swf_aa" Pure="false" ReturnType="Undefined">
 			<Description>通过此函数，您可以启用或禁用 SWF 格式矢量精灵的抗锯齿 (AA)。</Description>
@@ -6990,9 +7007,9 @@
 			<Parameter Name="prefetch" Optional="true" Type="Bool">组中的每个纹理是否应该加载到GPU内存中(默认为true)</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="texturegroup_add" Pure="false" ReturnType="Undefined">
-			<Description>添加一个名为 `groupname` 的新纹理组，该组包含单个图像文件或图像文件数组（图像文件可以是 `sprite_add` 接受的任何格式）。资源将根据参数中的 struct（或 json 字符串）中的描述创建。</Description>
+			<Description>添加一个名为 `groupname` 的新的纹理组，其中包含单个图像文件或一系列图像文件（这些图像文件的格式可以是 `sprite_add` 可以接受的任何格式）。 资源将根据结构体 (或 JSON 字符串) 中描述的方式创建。可以使用缓冲区代替文件名，使用的任何缓冲区都不应在纹理组删除之前被删除，用户负责在之后删除它们。</Description>
 			<Parameter Name="groupname" Optional="false" Type="String">要添加的纹理组名称</Parameter>
-			<Parameter Name="filename_or_array" Optional="false" Type="String|Array">用于图像文件的文件名或文件名数组</Parameter>
+			<Parameter Name="filename_or_buffer_or_array" Optional="false" Type="String|Array">用于图像文件的文件名或缓冲区引用，或者用于图像的文件名或缓冲区引用的数组。</Parameter>
 			<Parameter Name="struct_or_json" Optional="false" Type="String|Struct">关于如何从图像文件创建资源（精灵）的描述</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="texturegroup_delete" Pure="false" ReturnType="Bool">
@@ -8171,7 +8188,7 @@
 			<Description>此函数返回游戏在所选平台上运行的时间，单位为微秒(每秒一百万微秒)。</Description>
 		</Function>
 		<Function Deprecated="false" Name="matrix_build" Pure="true" ReturnType="Array[Real]">
-			<Description>此函数从三维（x、y、z）平移、旋转和缩放值创建自定义变换矩阵，并返回它。</Description>
+			<Description>此函数从三维(x, y, z)平移、旋转和缩放值创建自定义变换矩阵，并返回它。或者，可以选择性地将结果写入您指定的现有矩阵。</Description>
 			<Parameter Name="x" Optional="false" Type="Real">平移向量的x分量。</Parameter>
 			<Parameter Name="y" Optional="false" Type="Real">平移向量的y分量。</Parameter>
 			<Parameter Name="z" Optional="false" Type="Real">平移向量的z分量。</Parameter>
@@ -8181,12 +8198,13 @@
 			<Parameter Name="xscale" Optional="false" Type="Real">x轴缩放值。</Parameter>
 			<Parameter Name="yscale" Optional="false" Type="Real">y轴缩放值。</Parameter>
 			<Parameter Name="zscale" Optional="false" Type="Real">z轴缩放值。</Parameter>
+			<Parameter Name="result_matrix" Optional="true" Type="Array[Real]">您可以选择性地传入要存储结果的矩阵。这可以提供更好的性能。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="matrix_build_identity" Pure="true" ReturnType="Array[Real]">
 			<Description>这会构建一个 4x4 单位矩阵。</Description>
 		</Function>
 		<Function Deprecated="false" Name="matrix_build_lookat" Pure="true" ReturnType="Array[Real]">
-			<Description>此函数构建一个“看向”(look-at)矩阵（视图矩阵）。</Description>
+			<Description>此函数构建一个“观察(look-at)”矩阵(视图矩阵)。可以选择性地将结果写入你指定的现有矩阵。</Description>
 			<Parameter Name="xfrom" Optional="false" Type="Real">观察位置的x坐标。</Parameter>
 			<Parameter Name="yfrom" Optional="false" Type="Real">观察位置的y坐标。</Parameter>
 			<Parameter Name="zfrom" Optional="false" Type="Real">观察位置的z坐标。</Parameter>
@@ -8196,31 +8214,36 @@
 			<Parameter Name="xup" Optional="false" Type="Real">&quot;上&quot;向量的x坐标。</Parameter>
 			<Parameter Name="yup" Optional="false" Type="Real">&quot;上&quot;向量的y坐标。</Parameter>
 			<Parameter Name="zup" Optional="false" Type="Real">&quot;上&quot;向量的z坐标。</Parameter>
+			<Parameter Name="result_matrix" Optional="true" Type="Array[Real]">您可以选择性地传入要存储结果的矩阵。这可以提供更好的性能。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="matrix_build_projection_ortho" Pure="true" ReturnType="Array[Real]">
-			<Description>此函数基于指定的参数构建正交投影矩阵（当你在GameMaker中创建房间时，默认使用的投影方法）。</Description>
+			<Description>此函数基于指定的参数构建正交投影矩阵（这是在创建房间时使用的默认投影方法，无需更改任何设置）。并且可以选择将结果写入您指定的现有矩阵。</Description>
 			<Parameter Name="w" Optional="false" Type="Real">投影的宽度。</Parameter>
 			<Parameter Name="h" Optional="false" Type="Real">投影的高度。</Parameter>
 			<Parameter Name="znear" Optional="false" Type="Real">近剪裁平面。</Parameter>
 			<Parameter Name="zfar" Optional="false" Type="Real">远剪裁平面。</Parameter>
+			<Parameter Name="result_matrix" Optional="true" Type="Array[Real]">您可以选择性地传入要存储结果的矩阵。这可以提供更好的性能。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="matrix_build_projection_perspective" Pure="true" ReturnType="Array[Real]">
-			<Description>此函数基于近裁剪面的尺寸，使用指定的参数构建透视投影矩阵。</Description>
+			<Description>此函数基于近裁剪平面的尺寸，使用指定的参数构建透视投影矩阵。可以选择将结果写入您指定的现有矩阵。</Description>
 			<Parameter Name="w" Optional="false" Type="Real">投影在Z位置附近的宽度。</Parameter>
 			<Parameter Name="h" Optional="false" Type="Real">投影在Z位置附近的高度。</Parameter>
 			<Parameter Name="znear" Optional="false" Type="Real">近剪裁平面。</Parameter>
 			<Parameter Name="zfar" Optional="false" Type="Real">远剪裁平面。</Parameter>
+			<Parameter Name="result_matrix" Optional="true" Type="Array[Real]">您可以选择性地传入要存储结果的矩阵。这可以提供更好的性能。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="matrix_build_projection_perspective_fov" Pure="true" ReturnType="Array[Real]">
-			<Description>此函数基于视野构建透视投影矩阵，使用指定的参数。</Description>
+			<Description>此函数基于视野构建透视投影矩阵，并使用指定的参数。可以选择性地将结果写入您指定的现有矩阵。</Description>
 			<Parameter Name="fov" Optional="false" Type="Real">视场野的角度。</Parameter>
 			<Parameter Name="aspect" Optional="false" Type="Real">视场的长宽比。</Parameter>
 			<Parameter Name="znear" Optional="false" Type="Real">近剪裁平面。</Parameter>
 			<Parameter Name="zfar" Optional="false" Type="Real">远剪裁平面。</Parameter>
+			<Parameter Name="result_matrix" Optional="true" Type="Array[Real]">您可以选择性地传入要存储结果的矩阵。这可以提供更好的性能。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="matrix_get" Pure="true" ReturnType="Array[Real]">
-			<Description>此函数获取给定类型的当前使用的矩阵，可以是世界、视图或投影矩阵。</Description>
+			<Description>此函数获取给定类型的当前使用的矩阵，可以是世界、视图或投影矩阵。可以选择性地将结果写入您指定的现有矩阵。</Description>
 			<Parameter Name="type" Optional="false" Type="Constant.MatrixType">获取值的矩阵类型</Parameter>
+			<Parameter Name="result_matrix" Optional="true" Type="Array[Real]">您可以选择性地传入要存储结果的矩阵。这可以提供更好的性能。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="matrix_multiply" Pure="false" ReturnType="Array[Real]">
 			<Description>此函数将两个矩阵相乘以创建一个新矩阵，并将结果作为新矩阵返回，或者可选地将结果写入您指定的现有矩阵。</Description>
@@ -8229,8 +8252,9 @@
 			<Parameter Name="result_matrix" Optional="true" Type="Array[Real]">您可以选择性地传入要存储结果的矩阵。这可以提供更好的性能。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="matrix_inverse" Pure="false" ReturnType="Array[Real]">
-			<Description>此函数返回一个新矩阵，该矩阵是传递给它的矩阵的逆矩阵。</Description>
-			<Parameter Name="matrix" Optional="false" Type="Array[Real]">要获取逆矩阵的矩阵。</Parameter>			
+			<Description>此函数返回一个矩阵，该矩阵是您传递给它的矩阵的逆矩阵；或者，您可以选择将结果写入您指定的现有矩阵。</Description>
+			<Parameter Name="matrix" Optional="false" Type="Array[Real]">要获取逆矩阵的矩阵。</Parameter>		
+			<Parameter Name="result_matrix" Optional="true" Type="Array[Real]">您可以选择性地传入要存储结果的矩阵。这可以提供更好的性能。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="matrix_set" Pure="false" ReturnType="Undefined">
 			<Description>此函数将给定类型的当前矩阵（世界、视图或投影）设置为给定的矩阵。</Description>
@@ -8258,12 +8282,13 @@
 			<Description>此函数返回堆栈的当前顶矩阵，但不删除它(为此使用matrix_stack_pop())。</Description>
 		</Function>
 		<Function Deprecated="false" Name="matrix_transform_vertex" Pure="false" ReturnType="Array[Real]">
-			<Description>此函数将向量转换为矩阵，并以新数组的形式返回结果。* array[0] = x * array[1] = y * array[2] = z * array[3] = w（如果x、y、z和w都已提供）。 </Description>
+			<Description>此函数通过矩阵转换向量，并将结果作为新数组返回，或者可选地将结果写入您指定的现有数组。* array[0] = x * array[1] = y * array[2] = z * array[3] = w (如果提供了 x、y、z 和 w)。 </Description>
 			<Parameter Name="matrix" Optional="false" Type="Array[Real]">要使用的矩阵</Parameter>
 			<Parameter Name="x" Optional="false" Type="Real">变换向量的x分量</Parameter>
 			<Parameter Name="y" Optional="false" Type="Real">变换向量的y分量</Parameter>
 			<Parameter Name="z" Optional="false" Type="Real">变换向量的z分量</Parameter>
 			<Parameter Name="w" Optional="true" Type="Real">变换向量的w分量</Parameter>
+			<Parameter Name="result_array" Optional="true" Type="Array[Real]">你也可以选择将结果存储在数组中，这可以提高性能。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="abs" Pure="true" ReturnType="Real">
 			<Description>此函数返回输入参数的绝对值，所以如果它是正的，那么它将保持不变，但如果它是负的，它将乘以-1使其为正。</Description>
@@ -11160,6 +11185,13 @@
 		</Function>
 		<Function Deprecated="false" Name="draw_get_enable_skeleton_blendmodes" Pure="true" ReturnType="Bool">
 			<Description>此函数返回骨架精灵的每槽混合模式是启用 (true) 还是禁用 (false)。</Description>
+		</Function>
+		<Function Deprecated="false" Name="draw_enable_skeleton_blend_override" Pure="false" ReturnType="Undefined">
+			<Description>此函数用于启用 (true) 或禁用 (false) 是否覆盖骨骼精灵图集使用预乘 alpha 时默认混合模式。</Description>
+			<Parameter Name="enable" Optional="false" Type="Bool"/>
+		</Function>
+		<Function Deprecated="false" Name="draw_get_enable_skeleton_blend_override" Pure="true" ReturnType="Bool">
+			<Description>此函数返回true，如果骨骼精灵的图集使用预乘Alpha时，默认混合模式被覆盖；否则返回false。</Description>
 		</Function>
 		<Function Deprecated="false" Name="layer_get_forced_depth" Pure="true" ReturnType="Real">
 			<Description>此函数可用于检索渲染房间内层的Z深度集。</Description>

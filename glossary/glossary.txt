@@ -20,3 +20,4 @@ motor	马达
 camera	摄像机
 track	轨道
 SDF Effects	SDF 效果
+debug overly	调试叠加层

@@ -2423,6 +2423,15 @@
 			<Description>This function can be used to retrieve the unique ID value of the tile map element on a layer. Note that this function is specifically designed for use with tile maps that have been added in the IDE, as if you add a tile map to a layer through code using the function layer_tilemap_create(), then it will return the unique ID for the tile map element added. If the given tilemap ID is incorrect or the tilemap doesn't exist, the function will return -1.</Description>
 			<Parameter Name="layer_id" Type="String,Id.Layer" Optional="false">The unique ID value of the layer to target (or the layer name as a string)</Parameter>
 		</Function>
+		<Function Name="layer_tilemap_get_colmask" Deprecated="false" ReturnType="Asset.GMSprite" Pure="true">
+			<Description>This function can be used to retrieve the sprite that is being used as the collision mask for this tilemap.</Description>
+			<Parameter Name="tilemap_element_id" Type="Id.TileMapElement" Optional="false">The Id of the tilemap element for which you wish to know the colmask of.</Parameter>
+		</Function>
+		<Function Name="layer_tilemap_set_colmask" Deprecated="false" ReturnType="Real" Pure="false">
+			<Description>This function can be used to set the sprite that is being used as the collision mask for this tilemap. The dimensions of the sprite must match the dimensions of the sprite being used for the tileset. If the function succeeds it will return 0, if it fails it will return -1</Description>
+			<Parameter Name="tilemap_element_id" Type="Id.TileMapElement" Optional="false">The Id of the tilemap element for which you wish to know the colmask of.</Parameter>
+			<Parameter Name="index" Type="Asset.GMSprite" Optional="false">The index of the sprite to be used as the collision mask</Parameter>
+		</Function>
 		<Function Name="tilemap_clear" Deprecated="false" ReturnType="Undefined" Pure="false">
 			<Description>Using this function you can clear/set all the tiles on a given tile map. A default value of 0 will clear all the tiles from the layer (essentially making all tiles "empty"), while you can use the dedicated tile_* functions to create your own tile data to clear the tile map with.</Description>
 			<Parameter Name="tilemap_element_id" Type="Id.TileMapElement" Optional="false">The unique ID value of the tile map element to change</Parameter>
@@ -6507,6 +6516,10 @@
 			<Description>This function is used to retrieve information for the given vertex format.</Description>
 			<Parameter Name="format_id" Type="Id.VertexFormat" Optional="false">The vertex format for which information should be retrieved.</Parameter>
 		</Function>
+		<Function Name="vertex_format_exists" Deprecated="false" ReturnType="Bool" Pure="false">
+			<Description>This function will check whether the given vertex format exists in memory or not. If it does, the function will return true, otherwise it will return false.</Description>
+			<Parameter Name="format_id" Type="Id.VertexFormat" Optional="false" />
+		</Function>
 		<Function Name="vertex_freeze" Deprecated="false" ReturnType="Undefined" Pure="false">
 			<Description>This function can be used to "freeze" a vertex buffer. This buffer becomes read-only, meaning that if you need to change it, you would have to delete the whole buffer and re-create it. A frozen buffer can be submitted to the shader faster than a normal, dynamic buffer and is recommended for those effects that require an unchanging custom primitive for the duration of a level or the game.</Description>
 			<Parameter Name="buffer" Type="Id.VertexBuffer" Optional="false">The buffer to freeze.</Parameter>
@@ -6566,6 +6579,10 @@
 			<Parameter Name="byte" Type="Real" Optional="false">The second input value.</Parameter>
 			<Parameter Name="byte" Type="Real" Optional="false">The third input value.</Parameter>
 			<Parameter Name="byte" Type="Real" Optional="false">The fourth input value.</Parameter>
+		</Function>
+		<Function Name="vertex_buffer_exists" Deprecated="false" ReturnType="Bool" Pure="true">
+			<Description>This function will check whether the given buffer exists in memory or not. If it does, the function will return true, otherwise it will return false.</Description>
+			<Parameter Name="buffer" Type="Id.VertexBuffer" Optional="false">The index of the buffer to check.</Parameter>
 		</Function>
 		<Function Name="draw_enable_swf_aa" Deprecated="false" ReturnType="Undefined" Pure="false">
 			<Description>With this function you can enable or disable anti-aliasing (AA) for SWF format vector sprites.</Description>
@@ -7178,9 +7195,9 @@
 			<Parameter Name="prefetch" Type="Bool" Optional="true">Whether each texture in the group should be loaded into GPU memory (defaults to true)</Parameter>
 		</Function>
 		<Function Name="texturegroup_add" Deprecated="false" ReturnType="Undefined" Pure="false">
-			<Description>Add a new texturegroup with name `groupname` that contains either single image file or an array of image files (the image files are any of the formats that `sprite_add` can accept). Assets will be created based on the description in the struct (or json string) in the last parameter.</Description>
+			<Description>Add a new texturegroup with name `groupname` that contains either single image file or an array of image files (the image files are any of the formats that `sprite_add` can accept). Assets will be created based on the description in the struct (or json string) in the last parameter. Buffers can be used in place of filenames, any buffer used should NOT be deleted until the texturegroup is deleted, the user is responsibile for deleting them after that.</Description>
 			<Parameter Name="groupname" Type="String" Optional="false">The name of the texture group to add</Parameter>
-			<Parameter Name="filename_or_array" Type="String|Array" Optional="false">filename for the image file to use or an array of filenames for the images</Parameter>
+			<Parameter Name="filename_or_buffer_or_array" Type="String|Array" Optional="false">filename or buffer reference for the image file to use or an array of filenames or buffer references for the images</Parameter>
 			<Parameter Name="struct_or_json" Type="String|Struct" Optional="false">description of how assets (sprites) are to be created from the image files</Parameter>
 		</Function>
 		<Function Name="texturegroup_delete" Deprecated="false" ReturnType="Bool" Pure="false">
@@ -8414,7 +8431,7 @@
 			<Description>This function returns the time that your game has been running on the chosen platform in microseconds (there are 1 million microseconds per second).</Description>
 		</Function>
 		<Function Name="matrix_build" Deprecated="false" ReturnType="Array[Real]" Pure="true">
-			<Description>This function creates a custom transformation matrix from 3-dimensional (x, y, z) translation, rotation and scale values and returns it.</Description>
+			<Description>This function creates a custom transformation matrix from 3-dimensional (x, y, z) translation, rotation and scale values and returns it. Or optionally writes the result to an existing matrix that you specify.</Description>
 			<Parameter Name="x" Type="Real" Optional="false">The x component of the translation vector.</Parameter>
 			<Parameter Name="y" Type="Real" Optional="false">The y component of the translation vector.</Parameter>
 			<Parameter Name="z" Type="Real" Optional="false">The z component of the translation vector.</Parameter>
@@ -8424,12 +8441,13 @@
 			<Parameter Name="xscale" Type="Real" Optional="false">The x scale amount.</Parameter>
 			<Parameter Name="yscale" Type="Real" Optional="false">The y scale amount.</Parameter>
 			<Parameter Name="zscale" Type="Real" Optional="false">The z scale amount.</Parameter>
+			<Parameter Name="result_matrix" Type="Array[Real]" Optional="true">Optionally you can pass in the matrix in which you would like the result to be stored. This can provide better performance.</Parameter>
 		</Function>
 		<Function Name="matrix_build_identity" Deprecated="false" ReturnType="Array[Real]" Pure="true">
 			<Description>This will build a 4x4 identity matrix.</Description>
 		</Function>
 		<Function Name="matrix_build_lookat" Deprecated="false" ReturnType="Array[Real]" Pure="true">
-			<Description>This function builds a "look-at" (view) matrix.</Description>
+			<Description>This function builds a "look-at" (view) matrix. And can optionally write the result to an existing matrix that you specify.</Description>
 			<Parameter Name="xfrom" Type="Real" Optional="false">The x coordinate of the position to look from.</Parameter>
 			<Parameter Name="yfrom" Type="Real" Optional="false">The y coordinate of the position to look from.</Parameter>
 			<Parameter Name="zfrom" Type="Real" Optional="false">The z coordinate of the position to look from.</Parameter>
@@ -8439,31 +8457,36 @@
 			<Parameter Name="xup" Type="Real" Optional="false">The x coordinate of the "up" vector.</Parameter>
 			<Parameter Name="yup" Type="Real" Optional="false">The y coordinate of the "up" vector.</Parameter>
 			<Parameter Name="zup" Type="Real" Optional="false">The z coordinate of the "up" vector.</Parameter>
+			<Parameter Name="result_matrix" Type="Array[Real]" Optional="true">Optionally you can pass in the matrix in which you would like the result to be stored. This can provide better performance.</Parameter>
 		</Function>
 		<Function Name="matrix_build_projection_ortho" Deprecated="false" ReturnType="Array[Real]" Pure="true">
-			<Description>This function builds an orthographic projection matrix based on the specified parameters (this is the default projection method used when you create a room in GameMaker without changing anything).</Description>
+			<Description>This function builds an orthographic projection matrix based on the specified parameters (this is the default projection method used when you create a room in GameMaker without changing anything). And can optionally write the result to an existing matrix that you specify.</Description>
 			<Parameter Name="w" Type="Real" Optional="false">The width of the projection.</Parameter>
 			<Parameter Name="h" Type="Real" Optional="false">The height of the projection.</Parameter>
 			<Parameter Name="znear" Type="Real" Optional="false">The near clipping plane.</Parameter>
 			<Parameter Name="zfar" Type="Real" Optional="false">The far clipping plane.</Parameter>
+			<Parameter Name="result_matrix" Type="Array[Real]" Optional="true">Optionally you can pass in the matrix in which you would like the result to be stored. This can provide better performance.</Parameter>
 		</Function>
 		<Function Name="matrix_build_projection_perspective" Deprecated="false" ReturnType="Array[Real]" Pure="true">
-			<Description>This function builds a perspective projection matrix based on the dimensions of the near clipping plane, using the specified parameters.</Description>
+			<Description>This function builds a perspective projection matrix based on the dimensions of the near clipping plane, using the specified parameters. And can optionally write the result to an existing matrix that you specify.</Description>
 			<Parameter Name="w" Type="Real" Optional="false">The width of the projection at the near Z position.</Parameter>
 			<Parameter Name="h" Type="Real" Optional="false">The height of the projection at the near Z position.</Parameter>
 			<Parameter Name="znear" Type="Real" Optional="false">The near clipping plane.</Parameter>
 			<Parameter Name="zfar" Type="Real" Optional="false">The far clipping plane.</Parameter>
+			<Parameter Name="result_matrix" Type="Array[Real]" Optional="true">Optionally you can pass in the matrix in which you would like the result to be stored. This can provide better performance.</Parameter>
 		</Function>
 		<Function Name="matrix_build_projection_perspective_fov" Deprecated="false" ReturnType="Array[Real]" Pure="true">
-			<Description>This function builds a perspective projection matrix matrix based on field of view, using the specified parameters.</Description>
+			<Description>This function builds a perspective projection matrix matrix based on field of view, using the specified parameters. And can optionally write the result to an existing matrix that you specify.</Description>
 			<Parameter Name="fov" Type="Real" Optional="false">The angle of the field of view.</Parameter>
 			<Parameter Name="aspect" Type="Real" Optional="false">The aspect ratio of the field of view.</Parameter>
 			<Parameter Name="znear" Type="Real" Optional="false">The near clipping plane.</Parameter>
 			<Parameter Name="zfar" Type="Real" Optional="false">The far clipping plane.</Parameter>
+			<Parameter Name="result_matrix" Type="Array[Real]" Optional="true">Optionally you can pass in the matrix in which you would like the result to be stored. This can provide better performance.</Parameter>
 		</Function>
 		<Function Name="matrix_get" Deprecated="false" ReturnType="Array[Real]" Pure="true">
-			<Description>This function gets the currently used matrix of the given type, which can be either the world, view or projection matrix.</Description>
+			<Description>This function gets the currently used matrix of the given type, which can be either the world, view or projection matrix. And can optionally write the result to an existing matrix that you specify.</Description>
 			<Parameter Name="type" Type="Constant.MatrixType" Optional="false">The type of matrix to get the values of</Parameter>
+			<Parameter Name="result_matrix" Type="Array[Real]" Optional="true">Optionally you can pass in the matrix in which you would like the result to be stored. This can provide better performance.</Parameter>
 		</Function>
 		<Function Name="matrix_multiply" Deprecated="false" ReturnType="Array[Real]" Pure="false">
 			<Description>This function multiplies two matrices together to create a new matrix and returns the result as a new matrix, or optionally writes the result to an existing matrix that you specify.</Description>
@@ -8472,8 +8495,9 @@
 			<Parameter Name="result_matrix" Type="Array[Real]" Optional="true">Optionally you can pass in the matrix in which you would like the result to be stored. This can provide better performance.</Parameter>
 		</Function>
 		<Function Name="matrix_inverse" Deprecated="false" ReturnType="Array[Real]" Pure="false">
-			<Description>This function returns a new matrix that is the inverse of the matrix you pass it.</Description>
-			<Parameter Name="matrix" Type="Array[Real]" Optional="false">The matrix to get the inverse of.</Parameter>			
+			<Description>This function returns a new matrix that is the inverse of the matrix you pass it, or optionally writes the result to an existing matrix that you specify.</Description>
+			<Parameter Name="matrix" Type="Array[Real]" Optional="false">The matrix to get the inverse of.</Parameter>		
+			<Parameter Name="result_matrix" Type="Array[Real]" Optional="true">Optionally you can pass in the matrix in which you would like the result to be stored. This can provide better performance.</Parameter>
 		</Function>
 		<Function Name="matrix_set" Deprecated="false" ReturnType="Undefined" Pure="false">
 			<Description>This function sets the current matrix of the given type (world, view or projection) to the given matrix.</Description>
@@ -8501,7 +8525,7 @@
 			<Description>This function returns the current top matrix of the stack, but does not remove it (for that use matrix_stack_pop()).</Description>
 		</Function>
 		<Function Name="matrix_transform_vertex" Deprecated="false" ReturnType="Array[Real]" Pure="false">
-			<Description>This function transforms a vector by a matrix and returns the result as a new array.
+			<Description>This function transforms a vector by a matrix and returns the result as a new array, or optionally writes the result to an existing array that you specify.
 			* array[0] = x
 			* array[1] = y
 			* array[2] = z
@@ -8512,6 +8536,7 @@
 			<Parameter Name="y" Type="Real" Optional="false">The y component of the transform vector</Parameter>
 			<Parameter Name="z" Type="Real" Optional="false">The z component of the transform vector</Parameter>
 			<Parameter Name="w" Type="Real" Optional="true">The w component of the transform vector</Parameter>
+			<Parameter Name="result_array" Type="Array[Real]" Optional="true">Optionally you can pass in the array in which you would like the result to be stored. This can provide better performance.</Parameter>
 		</Function>
 		<Function Name="abs" Deprecated="false" ReturnType="Real" Pure="true">
 			<Description>This function returns the absolute value of the input argument, so if it's a positive value then it will remain the same, but if it's negative it will be multiplied by -1 to make it positive.</Description>
@@ -11439,6 +11464,13 @@
 		</Function>
 		<Function Name="draw_get_enable_skeleton_blendmodes" Deprecated="false" ReturnType="Bool" Pure="true">
 			<Description>This function returns whether per-slot blend modes for skeletal sprites are enabled (true) or disabled (false).</Description>
+		</Function>
+		<Function Name="draw_enable_skeleton_blend_override" Deprecated="false" ReturnType="Undefined" Pure="false">
+			<Description>This function is used to enable (true) or disable (false) whether the default blendmode is overridden if a skeletal sprite atlas uses premultiplied alpha.</Description>
+			<Parameter Name="enable" Type="Bool" Optional="false" />
+		</Function>
+		<Function Name="draw_get_enable_skeleton_blend_override" Deprecated="false" ReturnType="Bool" Pure="true">
+			<Description>This function returns true if the default blend mode is overriden for skeletal sprites whose atlases use premultiplied alpha or false otherwise.</Description>
 		</Function>
 		<Function Name="layer_get_forced_depth" Deprecated="false" ReturnType="Real" Pure="true">
 			<Description>This function can be used to retrieve the Z depth set for rendering layers within the room.</Description>
