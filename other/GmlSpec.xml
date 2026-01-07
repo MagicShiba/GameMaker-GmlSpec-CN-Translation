@@ -674,7 +674,14 @@
 		<Function Deprecated="false" Name="flexpanel_node_layout_get_position" Pure="true" ReturnType="Struct">
 			<Description>返回计算出的节点布局位置，以结构体形式：{left, top, width, height, bottom, right, hadOverflow, direction, paddingLeft, paddingRight, paddingTop, paddingBottom, marginLeft, marginRight, marginToip, marginBottom}{左, 上, 宽, 高, 下, 右, 溢出, 方向, 左内边距, 右内边距, 上内边距, 下内边距, 左外边距, 右外边距, 上外边距, 下外边距}。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">待查询的节点。</Parameter>
-			<Parameter Name="relative" Optional="true" Type="Bool">如果为真，则结构中的坐标相对于父级；否则为绝对(absolute)（并包含父级的定位），默认值为true（因此返回相对坐标(relative)）。</Parameter>
+			<Parameter Name="relative" Optional="true" Type="Bool">如果为 true，则结构中的坐标相对于父级；否则为绝对(absolute)（并包含父级的定位），默认值为true（因此返回相对坐标(relative)）。</Parameter>
+		</Function>
+		<Function Deprecated="false" Name="flexpanel_set_rounding_scale" Pure="false" ReturnType="Undefined">
+			<Description>设置用于对布局值进行四舍五入时所使用的缩放系数。值为 0 时将禁用四舍五入操作。</Description>
+			<Parameter Name="scaleFactor" Optional="false" Type="Real">四舍五入的缩放系数。默认值为 1。</Parameter>
+		</Function>
+		<Function Deprecated="false" Name="flexpanel_get_rounding_scale" Pure="true" ReturnType="Real">
+			<Description>获取在对布局值进行取整时所使用的当前缩放系数。</Description>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_set_align_content" Pure="false" ReturnType="Undefined">
 			<Description>设置节点的节点内容对齐方式。</Description>
@@ -1051,7 +1058,7 @@
 			<Parameter Name="index" Optional="false" Type="Real">设置的警报索引，取值范围为0 ~ 11。</Parameter>
 			<Parameter Name="value" Optional="false" Type="Real">警报设置的数值(整数形式)。</Parameter>
 		</Function>
-		<Function Deprecated="false" Name="instance_change" Pure="false" ReturnType="Undefined">
+		<Function Deprecated="true" Name="instance_change" Pure="false" ReturnType="Undefined">
 			<Description>您可以使用此函数将对象的一个实例更改为不同对象的另一个实例，并在此过程中决定是否执行初始实例销毁事件和清理事件以及新实例创建事件。</Description>
 			<Parameter Name="obj" Optional="false" Type="Asset.GMObject">调用对象将变为的新对象。</Parameter>
 			<Parameter Name="perf" Optional="false" Type="Bool">是否执行新对象的创建和销毁事件(true)或不执行(false)。</Parameter>
@@ -1471,6 +1478,7 @@
 			<Parameter Name="layers" Optional="true" Type="Bool">将房间层信息添加到结构中(默认为true)</Parameter>
 			<Parameter Name="layer_elements" Optional="true" Type="Bool">将层元素信息添加到结构中(默认为true)，注意:必须启用层才能获取任何layer_elements</Parameter>
 			<Parameter Name="tilemap_data" Optional="true" Type="Bool">将tilemap数据信息添加到结构中(默认为true)，注意:必须启用layers和layer_elements才能获取tilemap_data(如果存在)</Parameter>
+			<Parameter Name="live" Optional="true" Type="Bool">如果您请求查看当前房间的信息，那么如果此条件为true（默认情况下为false），它将报告当前房间的实时数据，否则则为来自 WAD 的数据。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="room_get_viewport" Pure="true" ReturnType="Array[Real]">
 			<Description>使用此函数，您可以检索到当前房间以外视口viewport的详细信息。</Description>
@@ -2352,7 +2360,7 @@
 			<Parameter Name="layer_id" Optional="false" Type="String,Id.Layer">目标图层的唯一ID值(或字符串形式的图层名称)</Parameter>
 			<Parameter Name="x" Optional="false" Type="Real">房间中tile map的 x 位置</Parameter>
 			<Parameter Name="y" Optional="false" Type="Real">房间中tile map的 y 位置</Parameter>
-			<Parameter Name="tile set" Optional="false" Type="Asset.GMTileSet">要使用的图块集索引</Parameter>
+			<Parameter Name="tileset" Optional="false" Type="Asset.GMTileSet">要使用的图块集索引</Parameter>
 			<Parameter Name="width" Optional="false" Type="Real">tile map宽度(以单元格为单位)</Parameter>
 			<Parameter Name="height" Optional="false" Type="Real">tile map高度(以单元格为单位)</Parameter>
 		</Function>
@@ -2422,7 +2430,7 @@
 			<Description>此函数可用于检索给定tile map的位掩码值。有关切片tile位掩码的更多信息，请参见函数tilemap_set_mask()。</Description>
 			<Parameter Name="tilemap_element_id" Optional="false" Type="Id.TileMapElement">要获取其掩码的tile map元素的唯一ID值</Parameter>
 		</Function>
-		<Function Deprecated="false" Name="tilemap_get_tileset" Pure="true" ReturnType="Real">
+		<Function Deprecated="false" Name="tilemap_get_tileset" Pure="true" ReturnType="Asset.GMTileSet">
 			<Description>使用此函数，您可以检索分配给图层上给定图层元素上的图块集资源的索引值。</Description>
 			<Parameter Name="tilemap_element_id" Optional="false" Type="Id.TileMapElement">要从中获取图块集的tile map元素的唯一ID值</Parameter>
 		</Function>
@@ -3184,7 +3192,7 @@
 			<Parameter Name="xoff" Optional="false" Type="Real">原点的x位置。</Parameter>
 			<Parameter Name="yoff" Optional="false" Type="Real">原点的y位置。</Parameter>
 		</Function>
-		<Function Deprecated="false" Name="sprite_set_speed" Pure="false" ReturnType="Real">
+		<Function Deprecated="false" Name="sprite_set_speed" Pure="false" ReturnType="Undefined">
 			<Description>此函数可用于设置精灵资源的基本动画速度和类型。这通常在精灵编辑器中设置，但有时您可能需要手动为特定精灵设置此项。</Description>
 			<Parameter Name="index" Optional="false" Type="Asset.GMSprite">要获取其动画类型的sprite的索引</Parameter>
 			<Parameter Name="speed" Optional="false" Type="Real"/>
@@ -3660,7 +3668,7 @@
 			<Description>此函数获取当前“seek”位置，供其他缓冲区函数使用。</Description>
 			<Parameter Name="buffer" Optional="false" Type="Id.Buffer">要使用的缓冲区的索引。</Parameter>
 		</Function>
-		<Function Deprecated="false" Name="buffer_write" Pure="false" ReturnType="Any">
+		<Function Deprecated="false" Name="buffer_write" Pure="false" ReturnType="Constant.BufferErrorType">
 			<Description>此函数可用于将数据写入先前创建的缓冲区。</Description>
 			<Parameter Name="buffer" Optional="false" Type="Id.Buffer">要写入的缓冲区的索引。</Parameter>
 			<Parameter Name="type" Optional="false" Type="Constant.BufferDataType">要写入缓冲区的数据类型。</Parameter>
@@ -3913,77 +3921,77 @@
 			<Parameter Name="yspeed" Optional="false" Type="Real">视图应该在垂直(y)轴上移动的速度(每个游戏帧的像素数)</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="camera_set_view_target" Pure="false" ReturnType="Undefined">
-			<Description>您可以通过此函数设置房间内查看相机的跟随目标。注意，如果您选择了一个对象ID，并且房间中有该对象的多个实例，GameMaker将无法知道您希望跟随哪个实例，因此它可能是其中的任何一个。</Description>
+			<Description>你可以使用此函数来设置房间内视图摄像机的跟随目标。请注意，如果你设置了对象 ID 并且房间中存在多个该对象的实例，GameMaker 将无法知道你希望跟踪哪个实例，因此它可能是其中任何一个。</Description>
 			<Parameter Name="camera_id" Optional="false" Type="Id.Camera">创建相机时返回的唯一相机ID值</Parameter>
-			<Parameter Name="instance_id/object_id" Optional="false" Type="Any">实例或对象，使相机跟随目标</Parameter>
+			<Parameter Name="id" Optional="false" Type="Id.Instance,Asset.GMObject">实例或对象，使相机跟随目标</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="view_get_camera" Pure="true" ReturnType="Real">
 			<Description>此函数可用于检索分配给给定视口（从 0 - 7）的摄像机的唯一摄像机 ID 值。如果没有指定相机，此函数将返回-1。</Description>
-			<Parameter Name="view_port" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
+			<Parameter Name="viewport" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="view_get_hport" Pure="true" ReturnType="Real">
 			<Description>此函数可用于检索给定视口的高度。</Description>
-			<Parameter Name="view_port" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
+			<Parameter Name="viewport" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="view_get_surface_id" Pure="true" ReturnType="Id.Surface">
 			<Description>此函数可用于检索分配给给定视口的表面的唯一ID值（如果未分配任何表面，将返回-1）。</Description>
-			<Parameter Name="view_port" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
+			<Parameter Name="viewport" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="view_get_visible" Pure="true" ReturnType="Bool">
 			<Description>此函数可用于检查给定视口的可见性。</Description>
-			<Parameter Name="view_port" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
+			<Parameter Name="viewport" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="view_get_wport" Pure="true" ReturnType="Real">
 			<Description>此函数可用于检索给定视口的宽度。</Description>
-			<Parameter Name="view_port" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
+			<Parameter Name="viewport" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="view_get_xport" Pure="true" ReturnType="Real">
 			<Description>此函数可用于检索给定视口的 x 坐标。</Description>
-			<Parameter Name="view_port" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
+			<Parameter Name="viewport" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="view_get_yport" Pure="true" ReturnType="Real">
 			<Description>此函数可用于检索给定视口的 y 坐标。</Description>
-			<Parameter Name="view_port" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
+			<Parameter Name="viewport" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="view_set_camera" Pure="false" ReturnType="Undefined">
 			<Description>此函数将给定的相机分配给给定的视口。</Description>
-			<Parameter Name="view_port" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
+			<Parameter Name="viewport" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
 			<Parameter Name="camera_id" Optional="false" Type="Id.Camera">创建相机时返回的唯一相机ID值</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="view_set_hport" Pure="false" ReturnType="Real">
 			<Description>此函数可用于设置给定视口的高度。</Description>
-			<Parameter Name="view_port" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
+			<Parameter Name="viewport" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
 			<Parameter Name="h" Optional="false" Type="Real">新的高度(像素)</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="view_set_surface_id" Pure="false" ReturnType="Undefined">
 			<Description>此函数将给定的视口的内容绘制到表面上。</Description>
-			<Parameter Name="view_port" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
+			<Parameter Name="viewport" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
 			<Parameter Name="surface_id" Optional="false" Type="Id.Surface"/>
 		</Function>
 		<Function Deprecated="false" Name="view_set_visible" Pure="false" ReturnType="Undefined">
 			<Description>此函数可用于设置给定视口的可见性。</Description>
-			<Parameter Name="view_port" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
+			<Parameter Name="viewport" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
 			<Parameter Name="visible" Optional="false" Type="Bool">可见性切换(true为可见，false为不可见)</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="view_set_wport" Pure="false" ReturnType="Real">
 			<Description>此函数可用于设置给定视口的宽度。</Description>
-			<Parameter Name="view_port" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
+			<Parameter Name="viewport" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
 			<Parameter Name="w" Optional="false" Type="Real">新的宽度(像素)</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="view_set_xport" Pure="false" ReturnType="Undefined">
 			<Description>此函数可用于设置给定视口的 x 坐标。</Description>
-			<Parameter Name="view_port" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
+			<Parameter Name="viewport" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
 			<Parameter Name="x" Optional="false" Type="Real">新的x坐标</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="view_set_yport" Pure="false" ReturnType="Undefined">
 			<Description>此函数可用于设置给定视口的 y 坐标。</Description>
-			<Parameter Name="view_port" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
+			<Parameter Name="viewport" Optional="false" Type="Real">目标视口（0 - 7）</Parameter>
 			<Parameter Name="y" Optional="false" Type="Real">新的y位置</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="window_center" Pure="false" ReturnType="Undefined">
 			<Description>使用此函数，当目标模块为 Windows、Ubuntu (Linux) 或 macOS 时，可以在显示器上居中游戏窗口，或者当目标模块为 HTML5 时，可以在浏览器中居中。</Description>
 		</Function>
-		<Function Deprecated="false" Name="window_device" Pure="true" ReturnType="Pointer">
+		<Function Deprecated="true" Name="window_device" Pure="true" ReturnType="Pointer">
 			<Description>此函数将返回当前的d3d设备指针，然后(举例来说)您可以将它传递给Windows和macOS上的DLL或Dylib。</Description>
 		</Function>
     <Function Deprecated="false" Name="window_post_message" Pure="false" ReturnType="Undefined">
@@ -5909,13 +5917,21 @@
 			<Description>使用此函数，您可以将索引系统清除到默认状态，删除所有发射器并重置深度和位置(如果它们已经更改过)。</Description>
 			<Parameter Name="ind" Optional="false" Type="Id.ParticleSystem">要清除的粒子系统的索引。</Parameter>
 		</Function>
-		<Function Deprecated="false" Name="particle_get_info" Pure="true" ReturnType="Struct">
-			<Description>此函数用于检索给定粒子系统资产或实例的信息。</Description>
-			<Parameter Name="partsys" Optional="false" Type="Asset.GMParticleSystem,Id.ParticleSystem">应该检索其信息的粒子系统。</Parameter>
+		<Function Deprecated="false" Name="particle_add" Pure="false" ReturnType="Asset.GMParticleSystem">
+			<Description>使用此函数，你可以从一个信息结构创建新的粒子系统资源。</Description>
+			<Parameter Name="info" Optional="false" Type="Struct">用于创建新的粒子系统资源的结构体信息。</Parameter>
+		</Function>
+		<Function Deprecated="false" Name="particle_delete" Pure="false" ReturnType="Undefined">
+			<Description>你可以使用此函数删除一个粒子系统资源。</Description>
+			<Parameter Name="ind" Optional="false" Type="Asset.GMParticleSystem">要删除的粒子系统资源。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="particle_exists" Pure="true" ReturnType="Bool">
 			<Description>使用此函数，您可以查看具有给定索引的粒子系统资源是否存在。</Description>
 			<Parameter Name="ind" Optional="false" Type="Asset.GMParticleSystem">要检查的粒子系统资源的索引。</Parameter>
+		</Function>
+		<Function Deprecated="false" Name="particle_get_info" Pure="true" ReturnType="Struct">
+			<Description>此函数用于检索给定粒子系统资产或实例的信息。</Description>
+			<Parameter Name="partsys" Optional="false" Type="Asset.GMParticleSystem,Id.ParticleSystem">应该检索其信息的粒子系统。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="part_system_create" Pure="false" ReturnType="Id.ParticleSystem">
 			<Description>此函数用于创建一个新的粒子系统，并将返回一个唯一的索引编号，该索编号应存储在与该系统相关的所有进一步函数中。系统将被分配一个管理层，并将其深度设置为0。被管理层对用户是不可访问的，当使用深度而不是层时，它只用于内部管理。通常您会使用函数part_system_create_layer()而不是此函数。</Description>
@@ -6569,7 +6585,7 @@
 		</Function>
 		<Function Deprecated="false" Name="draw_tile" Pure="false" ReturnType="Real">
 			<Description>使用此函数，您可以从瓦片集中绘制任何给定的瓦片——包括旋转、翻转和镜像——设置帧（如果动画化）以及在房间内的位置。</Description>
-			<Parameter Name="tile set" Optional="false" Type="Asset.GMTileSet">要使用的图块集的ID</Parameter>
+			<Parameter Name="tileset" Optional="false" Type="Asset.GMTileSet">要使用的图块集的ID</Parameter>
 			<Parameter Name="tiledata" Optional="false" Type="Real">要使用的图块(tile)数据</Parameter>
 			<Parameter Name="frame" Optional="false" Type="Real">要使用的动画图块的帧号（非动画图块的默认值为 0）</Parameter>
 			<Parameter Name="x" Optional="false" Type="Real">要绘制的房间内的x位置</Parameter>
@@ -7731,7 +7747,7 @@
 			<Description>此函数可用于获取运行游戏的设备上虚拟键盘的状态。如果操作系统虚拟键盘可见/显示，此函数将返回true如果隐藏，此函数将返回false。</Description>
 		</Function>
 		<Function Deprecated="false" Name="keyboard_virtual_set_position" Pure="false" ReturnType="Undefined">
-			<Description>此Windows专属函数可用于设置游戏运行设备上虚拟键盘的位置。传入的坐标是显示坐标（使用 application_get_position() 来查找游戏在这个空间中的位置）。</Description>
+			<Description>此Windows 专属函数可用于设置游戏运行设备上虚拟键盘的位置。传入的坐标是显示坐标（使用application_get_position()来查找游戏在此空间中的位置）。</Description>
 			<Parameter Name="x" Optional="false" Type="Real">请求位置的 x 坐标。</Parameter>
 			<Parameter Name="y" Optional="false" Type="Real">请求位置的 y 坐标。</Parameter>
 		</Function>
@@ -8226,15 +8242,15 @@
 		</Function>
 		<Function Deprecated="false" Name="matrix_build_projection_perspective" Pure="true" ReturnType="Array[Real]">
 			<Description>此函数基于近裁剪平面的尺寸，使用指定的参数构建透视投影矩阵。可以选择将结果写入您指定的现有矩阵。</Description>
-			<Parameter Name="w" Optional="false" Type="Real">投影在Z位置附近的宽度。</Parameter>
-			<Parameter Name="h" Optional="false" Type="Real">投影在Z位置附近的高度。</Parameter>
+			<Parameter Name="width" Optional="false" Type="Real">投影在Z位置附近的宽度。</Parameter>
+			<Parameter Name="height" Optional="false" Type="Real">投影在Z位置附近的高度。</Parameter>
 			<Parameter Name="znear" Optional="false" Type="Real">近剪裁平面。</Parameter>
 			<Parameter Name="zfar" Optional="false" Type="Real">远剪裁平面。</Parameter>
 			<Parameter Name="result_matrix" Optional="true" Type="Array[Real]">您可以选择性地传入要存储结果的矩阵。这可以提供更好的性能。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="matrix_build_projection_perspective_fov" Pure="true" ReturnType="Array[Real]">
 			<Description>此函数基于视野构建透视投影矩阵，并使用指定的参数。可以选择性地将结果写入您指定的现有矩阵。</Description>
-			<Parameter Name="fov" Optional="false" Type="Real">视场野的角度。</Parameter>
+			<Parameter Name="fov_y" Optional="false" Type="Real">视场垂直角度。</Parameter>
 			<Parameter Name="aspect" Optional="false" Type="Real">视场的长宽比。</Parameter>
 			<Parameter Name="znear" Optional="false" Type="Real">近剪裁平面。</Parameter>
 			<Parameter Name="zfar" Optional="false" Type="Real">远剪裁平面。</Parameter>
@@ -8569,7 +8585,7 @@
 			<Parameter Name="x3" Optional="false" Type="Real">要检查的三角形第三个角的x坐标。</Parameter>
 			<Parameter Name="y3" Optional="false" Type="Real">要检查的三角形第三个角的y坐标。</Parameter>
 		</Function>
-		<Function Deprecated="false" Name="position_change" Pure="false" ReturnType="Undefined">
+		<Function Deprecated="true" Name="position_change" Pure="false" ReturnType="Undefined">
 			<Description>此函数将检查在给定点与任何实例的碰撞位置，如果有，它会将碰撞中的所有实例更改为所选对象的实例。</Description>
 			<Parameter Name="x" Optional="false" Type="Id.Instance">要更改碰撞实例的位置的x坐标。</Parameter>
 			<Parameter Name="y" Optional="false" Type="Id.Instance">要更改碰撞实例的位置的y坐标。</Parameter>
@@ -8973,7 +8989,7 @@
 		<Function Deprecated="false" Name="gml_pragma" Pure="false" ReturnType="Undefined">
 			<Description>此函数会影响如何编译给定的目标，并且应该使用不同的命令来进一步优化项目的最终编译。这些命令在游戏编译之前就被有效地预处理了，所以函数可以放在项目的任何地方，在游戏完全编译之前它仍然会被处理。</Description>
 			<Parameter Name="command" Optional="false" Type="String">支持的命令之一的字符串。</Parameter>
-			<Parameter Name="optional" Optional="true" Type="Any">给定命令的可选参数或多个参数。</Parameter>
+			<Parameter Name="..." Optional="true" Type="ArgumentIdentity">给定命令的可选参数或多个参数。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="gml_release_mode" Pure="false" ReturnType="Undefined">
 			<Description>此函数设置游戏是否以发布模式运行。启用发布模式将禁用某些运行时内部错误检查。</Description>
@@ -10207,7 +10223,7 @@
 			<Parameter Name="instance_id/global" Optional="false" Type="Struct,Id.Instance,Constant.All">要检查的实例的唯一ID值或关键字global</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="variable_instance_names_count" Pure="true" ReturnType="Real">
-			<Description>通过此函数，您可以找到为一个实例定义的变量的总数。该函数将返回一个整数值，表示遇到的变量数量，或者如果未找到给定ID的实例，则返回-1。</Description>
+			<Description>此函数可用于查找为实例定义的变量总数。该函数将返回遇到的变量的数量的整数值，或如果未找到给定ID的任何实例，则返回-1。</Description>
 			<Parameter Name="instance_id" Optional="false" Type="Struct,Id.Instance">要检查的实例的唯一ID值。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="variable_instance_set" Pure="false" ReturnType="Undefined">
@@ -10231,7 +10247,7 @@
 			<Parameter Name="struct" Optional="false" Type="Struct">要检查的结构引用。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="variable_struct_names_count" Pure="true" ReturnType="Real">
-			<Description>通过此函数，您可以找到为结构定义的变量的总数。该函数将返回一个整数值，表示遇到的变量数量，或者如果不存在给定ID的结构体，则返回-1。</Description>
+			<Description>使用此函数，您可以找到为结构定义了多少变量。该函数将返回遇到的变量的数量的整数值，或如果不存在具有给定ID的结构，则返回-1。</Description>
 			<Parameter Name="struct_id" Optional="false" Type="Struct">要检查的结构的唯一ID值。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="variable_struct_remove" Pure="false" ReturnType="Undefined">
@@ -10275,7 +10291,7 @@
 			<Parameter Name="struct" Optional="false" Type="Struct">要检查的结构引用。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="struct_names_count" Pure="true" ReturnType="Real">
-			<Description>通过此函数，您可以找到为结构定义的变量的总数。该函数将返回一个整数值，表示遇到的变量数量，或者如果不存在给定ID的结构体，则返回-1。</Description>
+			<Description>使用此函数，您可以找到为结构定义了多少变量。该函数将返回遇到的变量的数量的整数值，或如果不存在具有给定ID的结构，则返回-1。</Description>
 			<Parameter Name="struct_id" Optional="false" Type="Struct">要检查的结构的唯一ID值。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="struct_remove" Pure="false" ReturnType="Undefined">
@@ -10655,7 +10671,7 @@
 		</Function>
 		<Function Deprecated="true" Name="audio_system" Pure="true" ReturnType="Undefined"/>
 		<Function Deprecated="false" Name="highscore_clear" Pure="false" ReturnType="Undefined"/>
-		<Function Deprecated="false" Name="font_get_first" Pure="true" ReturnType="Real">
+		<Function Deprecated="true" Name="font_get_first" Pure="true" ReturnType="Real">
 			<Parameter Name="ind" Optional="false" Type="Asset.GMFont"/>
 		</Function>
 		<Function Deprecated="true" Locale="GB" Name="room_set_background_colour" Pure="false" ReturnType="Undefined">
@@ -11512,9 +11528,9 @@
 		<Function Deprecated="false" Name="time_source_reconfigure" Pure="false" ReturnType="Undefined">
 			<Description>重置并重新配置时间源，同时重置时间源的所有子对象。</Description>
 			<Parameter Name="id" Optional="false" Type="Id.TimeSource">时间源的索引</Parameter>
-			<Parameter Name="period" Optional="true" Type="Real">时间源的周期</Parameter>
-			<Parameter Name="units" Optional="true" Type="Constant.TimeSourceUnits">衡量周期的单位</Parameter>
-			<Parameter Name="callback" Optional="true" Type="Function">时间源过期时要调用的回调</Parameter>
+			<Parameter Name="period" Optional="false" Type="Real">时间源的周期</Parameter>
+			<Parameter Name="units" Optional="false" Type="Constant.TimeSourceUnits">衡量周期的单位</Parameter>
+			<Parameter Name="callback" Optional="false" Type="Function">时间源过期时要调用的回调</Parameter>
 			<Parameter Name="args" Optional="true" Type="Array">要传递给回调的参数</Parameter>
 			<Parameter Name="reps" Optional="true" Type="Real">时间源应该执行的重复次数</Parameter>
 			<Parameter Name="expiry_type" Optional="true" Type="Constant.TimeSourceExpiryType">时间源的到期类型</Parameter>
@@ -11712,7 +11728,7 @@
 		<Variable Deprecated="false" Get="true" Instance="false" Name="mouse_y" Set="false" Type="Real">这个只读变量返回鼠标在房间内的当前y轴位置。</Variable>
 		<Variable Deprecated="false" Get="true" Instance="false" Name="cursor_sprite" Set="true" Type="Asset.GMSprite">设置此变量将指示GameMaker使用指定的精灵作为光标(基本上是将其设置为每一步的当前鼠标x/y位置)。默认值是-1，即没有用于光标的精灵，但你可以从游戏资源或从外部资源导入任何精灵索引。注意，没有办法控制动画速度或image_index，所以如果精灵有子图像，这些将以与房间速度相同的速度循环。要删除光标精灵，您可以再次将此变量设置为-1。</Variable>
 		<Variable Deprecated="false" Get="true" Instance="false" Name="game_display_name" Set="false" Type="String">这个只读变量返回目标平台上游戏的显示名称，就像在game Options中设置的那样。</Variable>
-		<Variable Deprecated="false" Get="true" Instance="false" Name="game_id" Set="false" Type="Real">这个只读变量返回你所创建的游戏的唯一标识符。如果你需要一个唯一的文件名，或者其他需要识别游戏的东西，你可以使用这个。这可以在游戏选项中设置。</Variable>
+		<Variable Deprecated="true" Get="true" Instance="false" Name="game_id" Set="false" Type="Real">这个只读变量返回你所创建的游戏的唯一标识符。如果你需要一个唯一的文件名，或者其他需要识别游戏的东西，你可以使用这个。这可以在游戏选项中设置。</Variable>
 		<Variable Deprecated="false" Get="true" Instance="false" Name="game_project_name" Set="false" Type="String">这个只读变量在目标平台以&quot;保存友好&quot;的格式返回游戏的显示名称。如果显示名称包含任何文件名不允许的字符，它们将自动替换为&quot;_&quot;。显示名称可以在游戏选项中设置。注意，由于HTML5对文件名没有限制，所以这个字符串可能与game_display_name返回的字符串相同。</Variable>
 		<Variable Deprecated="false" Get="true" Instance="false" Name="game_save_id" Set="false" Type="String">这个只读变量将返回你的游戏用来保存文件的目录的完整路径ID。这个目录对其他应用程序可能可见，也可能不可见，这取决于平台，在HTML5目标上，它将返回一个空字符串。</Variable>
 		<Variable Deprecated="false" Get="true" Instance="false" Name="current_day" Set="false" Type="Real">这个只读变量将返回1到31之间的值，具体取决于月份。</Variable>
@@ -11781,9 +11797,9 @@
 		<Variable Deprecated="false" Get="true" Instance="true" Name="in_collision_tree" Set="false" Type="Bool"/>
 		<Variable Deprecated="true" Get="true" Instance="false" Name="room_speed" Set="true" Type="Real"/>
 		<Variable Deprecated="true" Get="true" Instance="false" Name="room_caption" Set="true" Type="String"/>
-		<Variable Deprecated="false" Get="true" Instance="false" Name="score" Set="true" Type="Real"/>
-		<Variable Deprecated="false" Get="true" Instance="false" Name="lives" Set="true" Type="Real"/>
-		<Variable Deprecated="false" Get="true" Instance="false" Name="health" Set="true" Type="Real"/>
+		<Variable Deprecated="true" Get="true" Instance="false" Name="score" Set="true" Type="Real"/>
+		<Variable Deprecated="true" Get="true" Instance="false" Name="lives" Set="true" Type="Real"/>
+		<Variable Deprecated="true" Get="true" Instance="false" Name="health" Set="true" Type="Real"/>
 		<Variable Deprecated="true" Get="true" Instance="false" Name="show_score" Set="true" Type="Bool"/>
 		<Variable Deprecated="true" Get="true" Instance="false" Name="show_lives" Set="true" Type="Bool"/>
 		<Variable Deprecated="true" Get="true" Instance="false" Name="show_health" Set="true" Type="Bool"/>
@@ -12069,9 +12085,9 @@
 		<Constant Class="SeekOffset" Deprecated="false" Name="buffer_seek_start" Type="Real">缓冲区开始</Constant>
 		<Constant Class="SeekOffset" Deprecated="false" Name="buffer_seek_relative" Type="Real">相对于当前读/写位置的位置</Constant>
 		<Constant Class="SeekOffset" Deprecated="false" Name="buffer_seek_end" Type="Real">缓冲区的结束</Constant>
-		<Constant Class="BufferDataType" Deprecated="false" Name="buffer_error_general" Type="Real">通用缓冲区错误。</Constant>
-		<Constant Class="BufferDataType" Deprecated="false" Name="buffer_error_out_of_space" Type="Real">正在尝试写入缓冲区，但缓冲区空间不足以容纳要写入的类型的大小。</Constant>
-		<Constant Class="BufferDataType" Deprecated="false" Name="buffer_error_invalid_type" Type="Real">尝试将无效类型写入缓冲区。</Constant>
+		<Constant Class="BufferErrorType" Deprecated="false" Name="buffer_error_general" Type="Real">通用缓冲区错误。</Constant>
+		<Constant Class="BufferErrorType" Deprecated="false" Name="buffer_error_out_of_space" Type="Real">正在尝试写入缓冲区，但缓冲区空间不足以容纳要写入的类型的大小。</Constant>
+		<Constant Class="BufferErrorType" Deprecated="false" Name="buffer_error_invalid_type" Type="Real">尝试将无效类型写入缓冲区。</Constant>
 		<Constant Deprecated="false" Name="display_landscape" Type="Real">设备呈水平放置，即：最长边从左到右，菜单按钮位于右侧。</Constant>
 		<Constant Deprecated="false" Name="display_landscape_flipped" Type="Real">和上面一样，只是现在菜单按钮在左边。</Constant>
 		<Constant Deprecated="false" Name="display_portrait" Type="Real">设备正竖直放置，即：最长边从上到下，菜单按钮位于底部。</Constant>
@@ -12808,11 +12824,11 @@
 		</Structure>
 		<Structure Name="AnimCurve">
 			<Field Get="true" Name="name" Set="true" Type="String"/>
-			<Field Get="true" Name="graphType" Set="true" Type="Real"/>
 			<Field Get="true" Name="channels" Set="true" Type="Array"/>
 		</Structure>
 		<Structure Name="AnimCurveChannel">
-			<Field Get="true" Name="type" Set="true" Type="Constant.AnimCurveChannel"/>
+			<Field Get="true" Name="name" Set="true" Type="String"/>
+			<Field Get="true" Name="type" Set="true" Type="Constant.AnimCurveInterpolationType"/>
 			<Field Get="true" Name="iterations" Set="true" Type="Real"/>
 			<Field Get="true" Name="points" Set="true" Type="Real"/>
 		</Structure>
