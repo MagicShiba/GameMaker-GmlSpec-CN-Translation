@@ -3726,6 +3726,13 @@
 			<Parameter Name="offset" Type="Real" Optional="false">The offset within the buffer to save from (in bytes).</Parameter>
 			<Parameter Name="size" Type="Real" Optional="false">The size of the buffer area to save (in bytes).</Parameter>
 		</Function>
+		<Function Name="gx_share" Deprecated="false" ReturnType="Real" Pure="false">
+			<Description>This function shares a buffer or a url using the Web Share API (Emscripten only). The buffer contents will be shared as an image file. Returns 0 on success, -1 on error. A share_complete social async event will be triggered when the share completes or fails.</Description>
+			<Parameter Name="content" Type="Id.Buffer|String" Optional="false">The URL to share or the index of the buffer to share (must contain PNG image data).</Parameter>
+			<Parameter Name="title" Type="String" Optional="true">The title for the share dialog (optional).</Parameter>
+			<Parameter Name="text" Type="String" Optional="true">The text for the share dialog (optional).</Parameter>
+			<Parameter Name="filename" Type="String" Optional="true">The filename to be presented in the share dialog (optional).</Parameter>
+		</Function>
 		<Function Name="buffer_seek" Deprecated="false" ReturnType="Real" Pure="false">
 			<Description>This function moves the seek position of a buffer, setting it relative to the start, end or current seek position (that which was last used when reading or writing data).
 
@@ -3798,7 +3805,7 @@
 		<Function Name="display_get_sleep_margin" Deprecated="false" ReturnType="Real" Pure="true">
 			<Description>This function can be used to get the current sleep margin value used for the render timing of your game, and will return a millisecond value. For more information on display timing, please see display_set_timing_method().</Description>
 		</Function>
-		<Function Name="display_get_timing_method" Deprecated="false" ReturnType="Real" Pure="true">
+		<Function Name="display_get_timing_method" Deprecated="false" ReturnType="Constant.TimingMethod" Pure="true">
 			<Description>This function can be used to retrieve the timing method to be used for rendering your game.</Description>
 		</Function>
 		<Function Name="display_get_width" Deprecated="false" ReturnType="Real" Pure="true">
@@ -3833,7 +3840,7 @@
 		</Function>
 		<Function Name="display_set_timing_method" Deprecated="false" ReturnType="Undefined" Pure="false">
 			<Description>This function can be used to set the timing method to be used for rendering your game.</Description>
-			<Parameter Name="method" Type="String" Optional="false">The timing method to use</Parameter>
+			<Parameter Name="method" Type="Constant.TimingMethod" Optional="false">The timing method to use</Parameter>
 		</Function>
 		<Function Name="display_set_ui_visibility" Deprecated="false" ReturnType="Undefined" Pure="false">
 			<Description>This function can be used to show or hide the system UI on Android and iOS only.</Description>
@@ -7044,14 +7051,14 @@
 			<Parameter Name="h" Type="Real" Optional="false">The height of the new surface.</Parameter>
 		</Function>
 		<Function Name="surface_save" Deprecated="false" ReturnType="Undefined" Pure="false">
-			<Description>This function will save a surface to disc using the given filename. The surface must be saved as a *.png format file.</Description>
+			<Description>This function will save a surface to disc using the given filename, or to a buffer. The surface must be saved as a *.png format file.</Description>
 			<Parameter Name="surface_id" Type="Id.Surface" Optional="false">The ID of the surface to set as the drawing target.</Parameter>
-			<Parameter Name="fname" Type="String" Optional="false">The name of the saved image file.</Parameter>
+			<Parameter Name="fname" Type="String|Id.Buffer" Optional="false">The name of the saved image file, or a buffer to write the PNG data to.</Parameter>
 		</Function>
 		<Function Name="surface_save_part" Deprecated="false" ReturnType="Undefined" Pure="false">
-			<Description>This function will save a part of a surface to disc using the given filename. The surface must be saved as a *.png format file, and the (x, y) position must be given as local coordinates to the surface, bearing in mind that the top-left corner of the surface is always (0, 0).</Description>
+			<Description>This function will save a part of a surface to disc using the given filename, or to a buffer. The surface must be saved as a *.png format file, and the (x, y) position must be given as local coordinates to the surface, bearing in mind that the top-left corner of the surface is always (0, 0).</Description>
 			<Parameter Name="surface_id" Type="Id.Surface" Optional="false">The ID of the surface to set as the drawing target.</Parameter>
-			<Parameter Name="fname" Type="String" Optional="false">The name of the saved image file.</Parameter>
+			<Parameter Name="fname" Type="String|Id.Buffer" Optional="false">The name of the saved image file, or a buffer to write the PNG data to.</Parameter>
 			<Parameter Name="x" Type="Real" Optional="false">The starting x position within the surface.</Parameter>
 			<Parameter Name="y" Type="Real" Optional="false">The starting y position within the surface.</Parameter>
 			<Parameter Name="width" Type="Real" Optional="false">The width of the part to save.</Parameter>
@@ -7399,7 +7406,7 @@
 			<Parameter Name="zip_object" Type="Struct.Zip" Optional="true">The zip object to be saved.</Parameter>
 			<Parameter Name="path" Type="String" Optional="true">The path the zip should be saved to.</Parameter>
 		</Function>
-		<Function Name="directory_create" Deprecated="false" ReturnType="Undefined" Pure="false">
+		<Function Name="directory_create" Deprecated="false" ReturnType="Bool" Pure="false">
 			<Description>This function will create a directory with the given name in the save area.</Description>
 			<Parameter Name="dname" Type="String" Optional="false">The name of the directory to create.</Parameter>
 		</Function>
@@ -7441,7 +7448,7 @@
 			<Parameter Name="fname" Type="String" Optional="false">The name of the file to check.</Parameter>
 			<Parameter Name="attr" Type="Constant.FileAttribute" Optional="false">The attributes to check for.</Parameter>
 		</Function>
-		<Function Name="file_copy" Deprecated="false" ReturnType="Undefined" Pure="false">
+		<Function Name="file_copy" Deprecated="false" ReturnType="Real" Pure="false">
 			<Description>This function will copy the specified file, giving it the new name that you choose.</Description>
 			<Parameter Name="fname" Type="String" Optional="false">The name of the file to copy.</Parameter>
 			<Parameter Name="newname" Type="String" Optional="false">The name of the new, copied, file.</Parameter>
@@ -8667,6 +8674,7 @@
 		<Function Name="random_set_seed" Deprecated="false" ReturnType="Undefined" Pure="false">
 			<Description>This function sets the seed used by GameMaker to generate random numbers.</Description>
 			<Parameter Name="val" Type="Real" Optional="false">The seed to set.</Parameter>
+			<Parameter Name="fixRangeBug" Type="Bool" Optional="true">if parameter is given (does not matter on the value) it will use a different algorithm to initialise the random state, avoiding a bug that limited the effective range of the random state.</Parameter>
 		</Function>
 		<Function Name="round" Deprecated="false" ReturnType="Real" Pure="true">
 			<Description>This function takes a real number and rounds it up or down to the nearest integer.</Description>
@@ -12372,10 +12380,10 @@
 		<Constant Name="display_landscape_flipped" Type="Real" Deprecated="false">As above, only now the menu button is on the left.</Constant>
 		<Constant Name="display_portrait" Type="Real" Deprecated="false">The device is being held vertically i.e.: The longest edge is from top to bottom, and the menu button is at the bottom.</Constant>
 		<Constant Name="display_portrait_flipped" Type="Real" Deprecated="false">As above, only now the menu button is at the top.</Constant>
-		<Constant Name="tm_sleep" Type="Real" Deprecated="false">The sleep margin value is the main timing method</Constant>
-		<Constant Name="tm_countvsyncs" Type="Real" Deprecated="false">Vsync timing is the main timing method (default for all supported platforms)</Constant>
-		<Constant Name="tm_systemtiming" Type="Real" Deprecated="false">Ignore gamespeed and allow the system to control framerate</Constant>
-		<Constant Name="tm_countvsyncs_winalt" Type="Real" Deprecated="false">This is a windows-specific timing method which may improve consistency</Constant>
+		<Constant Name="tm_sleep" Class="TimingMethod" Type="Real" Deprecated="false">The sleep margin value is the main timing method</Constant>
+		<Constant Name="tm_countvsyncs" Class="TimingMethod" Type="Real" Deprecated="false">Vsync timing is the main timing method (default for all supported platforms)</Constant>
+		<Constant Name="tm_systemtiming" Class="TimingMethod" Type="Real" Deprecated="false">Ignore gamespeed and allow the system to control framerate</Constant>
+		<Constant Name="tm_countvsyncs_winalt" Class="TimingMethod" Type="Real" Deprecated="false">This is a windows-specific timing method which may improve consistency</Constant>
 		<Constant Name="cr_none" Class="Cursor" Type="Real" Deprecated="false"> </Constant>
 		<Constant Name="cr_default" Class="Cursor" Type="Real" Deprecated="false"/>
 		<Constant Name="cr_arrow" Class="Cursor" Type="Real" Deprecated="false"/>
@@ -12979,7 +12987,7 @@
 		<Constant Name="debug_input_filter_keyboard" Type="Real" Class="DebugInputFilter" Deprecated="false">Include keyboard input</Constant>
 		<Constant Name="debug_input_filter_mouse" Type="Real" Class="DebugInputFilter" Deprecated="false">Include mouse input</Constant>
 		<Constant Name="debug_input_filter_touch" Type="Real" Class="DebugInputFilter" Deprecated="false">Include touch input</Constant>
-		<Constant Name="rollback_connected_to_peer" Type="Real" Deprecated="false" FeatureFlag="rollback">Fired when the (in rollback_event_param) player_id is connected</Constant>
+    <Constant Name="rollback_connected_to_peer" Type="Real" Deprecated="false" FeatureFlag="rollback">Fired when the (in rollback_event_param) player_id is connected</Constant>
 		<Constant Name="rollback_synchronizing_with_peer" Type="Real" Deprecated="false" FeatureFlag="rollback">Fired when the (in rollback_event_param) player_id is synchonizing</Constant>
 		<Constant Name="rollback_synchronized_with_peer" Type="Real" Deprecated="false" FeatureFlag="rollback">Fired when the (in rollback_event_param) player_id is done synchonizing</Constant>
 		<Constant Name="rollback_disconnected_from_peer" Type="Real" Deprecated="false" FeatureFlag="rollback">Fired when the (in rollback_event_param) player_id is disconnected</Constant>

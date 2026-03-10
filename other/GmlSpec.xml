@@ -3627,6 +3627,13 @@
 			<Parameter Name="offset" Optional="false" Type="Real">要保存的缓冲区内的偏移量(字节)。</Parameter>
 			<Parameter Name="size" Optional="false" Type="Real">要保存的缓冲区大小(以字节为单位)。</Parameter>
 		</Function>
+		<Function Deprecated="false" Name="gx_share" Pure="false" ReturnType="Real">
+			<Description>此函数使用 Web Share API（仅限 Emscripten）共享缓冲区或 URL。缓冲区内容将作为图像文件进行共享。成功时返回 0，出错时返回 -1。共享完成或失败时将触发 share_complete 社交异步事件。</Description>
+			<Parameter Name="content" Optional="false" Type="Id.Buffer|String">要共享的 URL 或缓冲区索引（必须包含 PNG 图像数据）。</Parameter>
+			<Parameter Name="title" Optional="true" Type="String">共享对话框的标题（可选）。</Parameter>
+			<Parameter Name="text" Optional="true" Type="String">共享对话框的文本（可选）。</Parameter>
+			<Parameter Name="filename" Optional="true" Type="String">要在共享对话框中显示的文件名（可选）。</Parameter>
+		</Function>
 		<Function Deprecated="false" Name="buffer_seek" Pure="false" ReturnType="Real">
 			<Description>此函数移动缓冲区的查找(seek)位置，将其设置为相对于开始、结束或当前查找位置（即上次读取或写入数据时使用的位置）。查找位置是从缓冲区开始处偏移量（以字节为单位），用于写入新值的位置，也是用于读取值的起始位置。它在从缓冲区读取或写入时也会自动移动。 </Description>
 			<Parameter Name="buffer" Optional="false" Type="Id.Buffer">要使用的缓冲区的索引。</Parameter>
@@ -3692,7 +3699,7 @@
 		<Function Deprecated="false" Name="display_get_sleep_margin" Pure="true" ReturnType="Real">
 			<Description>此函数可以用来获取游戏渲染时间的当前睡眠余量值，并将返回一个毫秒值。有关显示时序的更多信息，请参见display_set_timing_method()。</Description>
 		</Function>
-		<Function Deprecated="false" Name="display_get_timing_method" Pure="true" ReturnType="Real">
+		<Function Deprecated="false" Name="display_get_timing_method" Pure="true" ReturnType="Constant.TimingMethod">
 			<Description>此函数可用于检索渲染游戏时使用的计时方法。</Description>
 		</Function>
 		<Function Deprecated="false" Name="display_get_width" Pure="true" ReturnType="Real">
@@ -3725,7 +3732,7 @@
 		</Function>
 		<Function Deprecated="false" Name="display_set_timing_method" Pure="false" ReturnType="Undefined">
 			<Description>此函数可以用来设置渲染游戏的计时方法。</Description>
-			<Parameter Name="method" Optional="false" Type="String">使用哪种计时方法</Parameter>
+			<Parameter Name="method" Optional="false" Type="Constant.TimingMethod">使用哪种计时方法</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="display_set_ui_visibility" Pure="false" ReturnType="Undefined">
 			<Description>此函数仅在 Android 和 iOS 上用于显示或隐藏系统 UI。</Description>
@@ -6856,14 +6863,14 @@
 			<Parameter Name="h" Optional="false" Type="Real">新表面的高度。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="surface_save" Pure="false" ReturnType="Undefined">
-			<Description>此函数将使用给定的文件名将表面保存到磁盘。表面必须保存为*.png格式文件。</Description>
+			<Description>此函数将使用给定的文件名将表面保存到磁盘，或保存到缓冲区。表面必须保存为 *.png 格式的文件。</Description>
 			<Parameter Name="surface_id" Optional="false" Type="Id.Surface">要设置为绘图目标的表面的ID。</Parameter>
-			<Parameter Name="fname" Optional="false" Type="String">保存的图像文件的名称。</Parameter>
+			<Parameter Name="fname" Optional="false" Type="String|Id.Buffer">已保存图像文件的名称，或用于写入 PNG 数据的缓冲区。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="surface_save_part" Pure="false" ReturnType="Undefined">
-			<Description>此函数将使用给定的文件名将表面的一部分保存到磁盘上。表面必须保存为*.png格式文件，(x,y)位置必须作为表面的局部坐标给出，请记住表面的左上角总是(0,0)。</Description>
+			<Description>此函数将使用给定的文件名将表面的部分保存到磁盘，或保存到缓冲区。表面必须以 *.png 格式保存，且 (x, y) 位置必须作为相对于表面的局部坐标给出，同时注意表面的左上角始终为 (0, 0)。</Description>
 			<Parameter Name="surface_id" Optional="false" Type="Id.Surface">要设置为绘图目标的表面的ID。</Parameter>
-			<Parameter Name="fname" Optional="false" Type="String">保存的图像文件的名称。</Parameter>
+			<Parameter Name="fname" Optional="false" Type="String|Id.Buffer">已保存图像文件的名称，或用于写入 PNG 数据的缓冲区。</Parameter>
 			<Parameter Name="x" Optional="false" Type="Real">表面内的起始x位置。</Parameter>
 			<Parameter Name="y" Optional="false" Type="Real">表面内y的起始位置。</Parameter>
 			<Parameter Name="width" Optional="false" Type="Real">要保存的部分的宽度。</Parameter>
@@ -7211,7 +7218,7 @@
 			<Parameter Name="zip_object" Optional="true" Type="Struct.Zip">要保存的zip对象。</Parameter>
 			<Parameter Name="path" Optional="true" Type="String">zip应保存到的路径。</Parameter>
 		</Function>
-		<Function Deprecated="false" Name="directory_create" Pure="false" ReturnType="Undefined">
+		<Function Deprecated="false" Name="directory_create" Pure="false" ReturnType="Bool">
 			<Description>此函数将在保存区域创建一个给定名称的目录。</Description>
 			<Parameter Name="dname" Optional="false" Type="String">要创建的目录的名称。</Parameter>
 		</Function>
@@ -7253,7 +7260,7 @@
 			<Parameter Name="fname" Optional="false" Type="String">要检查的文件的名称。</Parameter>
 			<Parameter Name="attr" Optional="false" Type="Constant.FileAttribute">要检查的属性。</Parameter>
 		</Function>
-		<Function Deprecated="false" Name="file_copy" Pure="false" ReturnType="Undefined">
+		<Function Deprecated="false" Name="file_copy" Pure="false" ReturnType="Real">
 			<Description>此函数将复制指定的文件，给它一个你选择的新名字。</Description>
 			<Parameter Name="fname" Optional="false" Type="String">要复制的文件的名称。</Parameter>
 			<Parameter Name="newname" Optional="false" Type="String">新复制文件的名称。</Parameter>
@@ -8419,6 +8426,7 @@
 		<Function Deprecated="false" Name="random_set_seed" Pure="false" ReturnType="Undefined">
 			<Description>此函数设置GameMaker生成随机数所使用的种子。</Description>
 			<Parameter Name="val" Optional="false" Type="Real">要设定的种子。</Parameter>
+			<Parameter Name="fixRangeBug" Optional="true" Type="Bool">如果提供了参数（无论其值如何），它将使用不同的算法来初始化随机状态，从而避免一个限制了随机状态有效范围的 bug。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="round" Pure="true" ReturnType="Real">
 			<Description>此函数接受一个实数，并将其四舍五入到最接近的整数。</Description>
@@ -12092,10 +12100,10 @@
 		<Constant Deprecated="false" Name="display_landscape_flipped" Type="Real">和上面一样，只是现在菜单按钮在左边。</Constant>
 		<Constant Deprecated="false" Name="display_portrait" Type="Real">设备正竖直放置，即：最长边从上到下，菜单按钮位于底部。</Constant>
 		<Constant Deprecated="false" Name="display_portrait_flipped" Type="Real">和上面一样，只是现在菜单按钮在顶部。</Constant>
-		<Constant Deprecated="false" Name="tm_sleep" Type="Real">睡眠裕度值是主要的计时方法</Constant>
-		<Constant Deprecated="false" Name="tm_countvsyncs" Type="Real">垂直同步计时是主要的计时方法(所有支持的平台默认)</Constant>
-		<Constant Deprecated="false" Name="tm_systemtiming" Type="Real">忽略gamespeed并允许系统控制帧率</Constant>
-		<Constant Deprecated="false" Name="tm_countvsyncs_winalt" Type="Real">这是一个特定于 Windows 的计时方法，可能提高一致性。</Constant>
+		<Constant Class="TimingMethod" Deprecated="false" Name="tm_sleep" Type="Real">睡眠裕度值是主要的计时方法</Constant>
+		<Constant Class="TimingMethod" Deprecated="false" Name="tm_countvsyncs" Type="Real">垂直同步计时是主要的计时方法(所有支持的平台默认)</Constant>
+		<Constant Class="TimingMethod" Deprecated="false" Name="tm_systemtiming" Type="Real">忽略gamespeed并允许系统控制帧率</Constant>
+		<Constant Class="TimingMethod" Deprecated="false" Name="tm_countvsyncs_winalt" Type="Real">这是一个特定于 Windows 的计时方法，可能提高一致性。</Constant>
 		<Constant Class="Cursor" Deprecated="false" Name="cr_none" Type="Real"> </Constant>
 		<Constant Class="Cursor" Deprecated="false" Name="cr_default" Type="Real"/>
 		<Constant Class="Cursor" Deprecated="false" Name="cr_arrow" Type="Real"/>
@@ -12705,7 +12713,7 @@
 		<Constant Class="DebugInputFilter" Deprecated="false" Name="debug_input_filter_keyboard" Type="Real">包含键盘输入</Constant>
 		<Constant Class="DebugInputFilter" Deprecated="false" Name="debug_input_filter_mouse" Type="Real">包含鼠标输入</Constant>
 		<Constant Class="DebugInputFilter" Deprecated="false" Name="debug_input_filter_touch" Type="Real">包含触摸输入</Constant>
-		<Constant Deprecated="false" FeatureFlag="rollback" Name="rollback_connected_to_peer" Type="Real">当(在rollback_event_param中)player_id被连接时触发</Constant>
+    <Constant Deprecated="false" FeatureFlag="rollback" Name="rollback_connected_to_peer" Type="Real">当(在rollback_event_param中)player_id被连接时触发</Constant>
 		<Constant Deprecated="false" FeatureFlag="rollback" Name="rollback_synchronizing_with_peer" Type="Real">当(在rollback_event_param中)player_id正在同步时触发</Constant>
 		<Constant Deprecated="false" FeatureFlag="rollback" Name="rollback_synchronized_with_peer" Type="Real">当(在rollback_event_param中)player_id完成同步时触发</Constant>
 		<Constant Deprecated="false" FeatureFlag="rollback" Name="rollback_disconnected_from_peer" Type="Real">当(在rollback_event_param中)player_id断开连接时触发</Constant>

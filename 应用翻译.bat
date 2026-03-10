@@ -1,13 +1,17 @@
 @echo off
 title 使用汉化文件
 setlocal enabledelayedexpansion
-set t_bb1=0 月度版 
-set t_bb2=1 beta版
-set t_bb3=2 恢复英文
+set t_bb0=0 月度版 
+set t_bb1=1 beta版
+set t_bb2=2 恢复英文
+set t_bb3=3 vscode - stitch
 
 set t_bbe=输入错误  请重新输入
 set t_bbc=你选择了:
 set filep=target\GmlSpec.xml
+set stvsp="%USERPROFILE%\.vscode\extensions"
+set thyp=%~dp0target\
+
 if not exist %filep% (
 	echo ！不要乱动文件！
 	echo ！将要退出！
@@ -22,27 +26,46 @@ echo .    注意:只会应用到最新版
 echo .    你也可以手动复制到其它版本
 echo .
 echo .    选择应用到:
-echo .    %t_bb1% %t_bb2%
+echo .    %t_bb0% %t_bb1% %t_bb3%
+
 : xz
 set bb=""
 set /p bb= .    
+
+:: 垃圾逻辑代码
 if %bb% == 0 (
 	set rtmp=C:\ProgramData\GameMakerStudio2\Cache\runtimes\
 ) else if %bb% == 1 (
 	set rtmp=C:\ProgramData\GameMakerStudio2-Beta\Cache\runtimes\
+) else if %bb% == 2 (
+	::麻烦,懒得实现了
+	echo 未实现
+	goto :end
+) else if %bb% == 3 (
+
+	echo %stvsp%
+	for /d %%D in ("%stvsp%\bscotch.bscotch-stitch-vscode-*") do (
+		set "TARGET=%%~fD\assets"
+		goto :found
+	)
+	echo 未在 %stvsp% 中找到 stitch-vscode 插件目录。
+	goto :end
+	:found
+	echo 替换目标路径: %TARGET%
+	copy target\GmlSpec.xml %TARGET%
+	goto :end
 ) else (
 	echo .    %t_bbe%
 	goto :xz
 )
-::else if %bb% == 2 (
-::	echo .    %t_bb3%
-::	set thyp=%~dp0target
-::)
+
+:: 标准版本选择
 echo . 
 echo .    %t_bbc% %bb%
 echo .    
 
-set thyp=%~dp0target\
+
+:: 标准版本替换
 echo 汉化文件路径: %thyp%GmlSpec.xml
 cd /d %rtmp%
 FOR /D %%i IN (*) DO (
@@ -61,6 +84,8 @@ echo .
 
 copy GmlSpec.xml %thmb%
 
+
+:end
 echo .
 echo .
 echo .   自动退出
