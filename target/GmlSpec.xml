@@ -667,9 +667,10 @@
 		<Function Deprecated="false" Name="flexpanel_calculate_layout" Pure="false" ReturnType="Undefined">
 			<Description>计算所选节点及其子节点的布局。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">开始布局计算的节点。</Parameter>
-			<Parameter Name="width" Optional="false" Type="[Real,undefined]">计算布局的区域宽度。</Parameter>
-			<Parameter Name="height" Optional="false" Type="[Real,undefined]">计算布局区域的高度。</Parameter>
-			<Parameter Name="direction" Optional="false" Type="Enum.flexpanel_direction">布局计算应遵循的方向。</Parameter>
+			<Parameter Name="width" Optional="true" Type="[Real,undefined]">计算布局的区域宽度。</Parameter>
+			<Parameter Name="height" Optional="true" Type="[Real,undefined]">计算布局区域的高度。</Parameter>
+			<Parameter Name="direction" Optional="true" Type="Enum.flexpanel_direction">布局计算应遵循的方向。</Parameter>
+			<Parameter Name="dirty" Optional="true" Type="Bool">是否强制调用任何度量函数 (默认为 true)。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_layout_get_position" Pure="true" ReturnType="Struct">
 			<Description>返回计算出的节点布局位置，以结构体形式：{left, top, width, height, bottom, right, hadOverflow, direction, paddingLeft, paddingRight, paddingTop, paddingBottom, marginLeft, marginRight, marginToip, marginBottom}{左, 上, 宽, 高, 下, 右, 溢出, 方向, 左内边距, 右内边距, 上内边距, 下内边距, 左外边距, 右外边距, 上外边距, 下外边距}。</Description>
@@ -684,250 +685,250 @@
 			<Description>获取在对布局值进行取整时所使用的当前缩放系数。</Description>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_set_align_content" Pure="false" ReturnType="Undefined">
-			<Description>设置节点的节点内容对齐方式。</Description>
+			<Description>此函数设置节点内容的对齐方式。如果将换行设置为 `flexpanel_wrap.wrap` 或 `flexpanel_wrap.reverse`，则沿主轴溢出的任何项目都将在交叉轴上的新行中进行布局。&quot;align content&quot; 属性控制这些换行项目在交叉轴上的分布方式。您可以从以下值中进行选择： * `flexpanel_align.flex_start` (默认): 将换行项目对齐到容器交叉轴的起点。 * `flexpanel_align.flex_end`: 将换行项目对齐到容器交叉轴的终点。 * `flexpanel_align.stretch`: 拉伸换行项目以匹配容器交叉轴的高度。 * `flexpanel_align.center`: 将换行项目在容器交叉轴的中间对齐。 * `flexpanel_align.space_between`: 在容器交叉轴上均匀分布换行项目，将剩余空间分配在各行之间。 * `flexpanel_align.space_around`: 与 `flexpanel_align.space_between` 类似，但也会在第一个子元素之前和最后一个子元素之后分配空间。 * `flexpanel_align.space_evenly`: 与 `flexpanel_align.space_around` 类似，但边缘与子元素之间以及每个子节点之间的间距完全相同。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">要设置的节点。</Parameter>
-			<Parameter Name="align" Optional="false" Type="Enum.flexpanel_justify">所选的对齐方式。</Parameter>
+			<Parameter Name="align" Optional="false" Type="Enum.flexpanel_align">所选的对齐方式。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_set_align_items" Pure="false" ReturnType="Undefined">
-			<Description>设置节点的项的对齐方式。</Description>
+			<Description>此函数设置节点的项目对齐方式。它控制 flex 容器的非绝对定位子项沿其交叉轴（即垂直于“flex direction”的方向）的对齐方式。您可以从以下值中进行选择： * `flexpanel_align.stretch`(默认值)：拉伸子项以适应交叉轴的大小。 * `flexpanel_align.flex_start`：将子项对齐到交叉轴的起点。 * `flexpanel_align.flex_end`：将子项对齐到交叉轴的终点。 * `flexpanel_align.center`：将子项对齐到交叉轴的中心。 * `flexpanel_align.baseline`：沿共同的基线对齐子项。可以为单个子项设置其父级的参考基线。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">要设置的节点。</Parameter>
 			<Parameter Name="align" Optional="false" Type="Enum.flexpanel_align">所选的对齐方式。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_set_align_self" Pure="false" ReturnType="Undefined">
-			<Description>设置所选节点的对齐方式。</Description>
+			<Description>此函数设置所选节点的对齐方式。这与 &quot;align items&quot; 相同。但是，它是直接应用于子节点，而不是应用于容器，并影响其在容器内的交叉轴对齐。此属性会覆盖为其父容器设置的 &quot;align items&quot; 值。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">要设置的节点。</Parameter>
 			<Parameter Name="align" Optional="false" Type="Enum.flexpanel_align">所选的对齐方式。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_set_aspect_ratio" Pure="false" ReturnType="Undefined">
-			<Description>设置节点的纵横比</Description>
+			<Description>此函数设置节点的宽高比。这是节点必须保持的宽高比，并与水平轴相对应。例如，宽高比为 `1` 将得到一个正方形节点，`2` 将是一个宽是高两倍的 2:1 长方形，`0.5` 将使宽度为高度的一半。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">要设置的节点。</Parameter>
 			<Parameter Name="value" Optional="false" Type="Real">值</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_set_display" Pure="false" ReturnType="Undefined">
-			<Description>设置所选节点的显示设置。</Description>
+			<Description>此函数设置所选节点的显示设置。显示设置控制节点遵循的布局模式。您可以从以下值中进行选择：* `flexpanel_display.flex` (默认): 默认布局行为。 * `flexpanel_display.none`: 禁用该节点。这在效果上相当于该节点已从树中移除，因为它不包含在任何计算中。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">要设置的节点。</Parameter>
 			<Parameter Name="display" Optional="false" Type="Enum.flexpanel_display">选择显示。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_set_flex" Pure="false" ReturnType="Undefined">
-			<Description>设置所选节点的flex值。</Description>
+			<Description>此函数设置所选节点的 flex 值。Flex 是 &quot;flex grow&quot; 和 &quot;flex shrink&quot; 属性的简写。当值为正数时，它将作为 &quot;flex grow&quot; 起作用；当值为负数时，它将作为 &quot;flex shrink&quot; 起作用。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">要设置的节点</Parameter>
-			<Parameter Name="flex" Optional="false" Type="Real">此处的flex值</Parameter>
+			<Parameter Name="flex" Optional="false" Type="Real">此项的 flex 值</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_set_flex_wrap" Pure="false" ReturnType="Undefined">
-			<Description>设置所选节点的flex包裹。</Description>
+			<Description>此函数设置所选节点的 flex wrap (包裹/换行)。Flex wrap 控制当容器中的子元素在主轴 (main axis) 上发生溢出时的情况。默认情况下，它们将根据其属性进行溢出或收缩。您可以从以下值中进行选择： * `flexpanel_wrap.no_wrap` (默认): 默认行为，不换行 * `flexpanel_wrap.wrap`: 子节点在溢出时换行，每一行都会被放置在交叉轴 (cross axis) 上 * `flexpanel_wrap.wrap_reverse`: 子节点会换行，但行的顺序是反转的</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">要设置的节点。</Parameter>
-			<Parameter Name="align" Optional="false" Type="Enum.flexpanel_wrap">所选的包裹。</Parameter>
+			<Parameter Name="align" Optional="false" Type="Enum.flexpanel_wrap">已选中的换行 (wrap)。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_set_flex_grow" Pure="false" ReturnType="Undefined">
-			<Description>设置所选节点的弹性增长系数。</Description>
+			<Description>此函数设置所选节点的 flex grow(包裹/换行)。Flex grow 控制节点根据容器内的剩余空间，在 flex 容器中增长的方式。它是一个正权重值，默认为 1。例如，如果有一个 400px 的容器，其中一个节点为 40px，而另一个节点的 &quot;flex grow&quot; 值为 `1`，那么第二个节点将占据容器内的任何剩余空间。除 1 以外的任何值都决定了节点相对于同一容器中其他增长节点的大小，例如，具有较大值的节点将被赋予更大的尺寸。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">要设置的节点。</Parameter>
 			<Parameter Name="grow" Optional="false" Type="Real">所选增长因子</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_set_flex_shrink" Pure="false" ReturnType="Undefined">
-			<Description>设置所选节点的flex收缩比例。</Description>
+			<Description>此函数设置所选节点的 flex shrink(收缩)。Flex shrink 控制当发生溢出时，节点在其 flex container(容器) 中收缩的方式。它是一个正权重值，默认为 1。除 1 以外的任何值都会决定节点相对于同一容器中的其他 growing nodes 的收缩程度。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">要设置的节点。</Parameter>
-			<Parameter Name="shrink" Optional="false" Type="Real">所选的缩小因子</Parameter>
+			<Parameter Name="shrink" Optional="false" Type="Real">所选的收缩系数</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_set_flex_basis" Pure="false" ReturnType="Undefined">
-			<Description>设置所选节点的 flex 基础(basis)。</Description>
+			<Description>此函数设置所选节点的 flex basis(基础)。Flex basis 是项目在应用任何 flex grow 或 shrink 之前的默认大小。对于行容器，这会影响宽度；对于列容器，这会影响高度。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">要设置的节点。</Parameter>
 			<Parameter Name="value" Optional="false" Type="Real">所选的 flex 基础(basis)值</Parameter>
 			<Parameter Name="unit" Optional="false" Type="Enum.flexpanel_unit">要使用的单位</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_set_flex_direction" Pure="false" ReturnType="Undefined">
-			<Description>设置所选节点的flex方向。</Description>
+			<Description>此函数设置所选节点的 flex direction(朝向)。Flex direction 是该节点非绝对定位子节点布局的方向。此方向被称为主轴，而与其垂直的方向被称为交叉轴。你可以从以下值中进行选择： * `flexpanel_flex_direction.column` (默认): 从上到下对齐子节点。 * `flexpanel_flex_direction.row`: 从左到右对齐子节点。 * `flexpanel_flex_direction.column_reverse`: 从下到上对齐子节点。 * `flexpanel_flex_direction.row_reverse`: 从右到左对齐子节点。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">要设置的节点。</Parameter>
 			<Parameter Name="direction" Optional="false" Type="Enum.flexpanel_flex_direction">所选方向。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_set_gap" Pure="false" ReturnType="Undefined">
-			<Description>设置所选装订线(gutter)的选定节点的间隙(gap)。</Description>
+			<Description>此函数为所选边距设置所选槽位的 gap (间隙)。间隙是 flex 容器的每一行和每一列之间增加的距离，并会影响子节点之间的距离。您可以应用于两个轴，或者仅应用于行或列。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">要设置的节点。</Parameter>
 			<Parameter Name="gutter" Optional="false" Type="Enum.flexpanel_gutter">所选装订线(gutter)（列/行/全部）。</Parameter>
 			<Parameter Name="size" Optional="false" Type="Real">所选的间隙(gap)大小</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_set_position" Pure="false" ReturnType="Undefined">
-			<Description>设置节点上的内嵌位置。</Description>
+			<Description>此函数设置节点上的内缩位置 (inset position)。内缩位置定义了节点边缘与其父节点相同边缘之间的距离，正值将节点向中心移动，负值将节点向远离中心的方向移动。例如，`left` 值为 `20` 将使节点的左边缘位于父节点左边缘右侧 20 像素处。`right` 值为 `40` 将移动节点，使其右边缘位于父节点右边缘左侧 40 像素处，且不改变节点的大小。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">要设置的节点。</Parameter>
 			<Parameter Name="edge" Optional="false" Type="Enum.flexpanel_edge">所选边。</Parameter>
 			<Parameter Name="value" Optional="false" Type="Real">值</Parameter>
 			<Parameter Name="unit" Optional="false" Type="Enum.flexpanel_unit">要使用的单位</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_set_justify_content" Pure="false" ReturnType="Undefined">
-			<Description>设置节点的对齐方式</Description>
+			<Description>此函数设置节点的对齐方式。对齐方式控制 flex 容器的非绝对定位的子元素沿其主轴 (即 flex direction 的方向) 的对齐方式。您可以从以下值中进行选择： * `flexpanel_justify.start` (默认): 将子元素对齐到 &quot;flex direction&quot; 设置的主轴起点。 * `flexpanel_justify.flex_end`: 将子元素对齐到主轴的终点，作为 &quot;flex direction&quot; 的反向操作。 * `flexpanel_justify.center`: 将子元素对齐到主轴的中心。 * `flexpanel_justify.space_between`: 将子元素从容器的起点对齐到终点，并在每个子元素之间插入空格以填满容器。 * `flexpanel_justify.space_around`: 与 `flexpanel_justify.space_between` 类似，但在第一个子元素之前和最后一个子元素之后也会分配空格。 * `flexpanel_justify.space_evenly`: 与 `flexpanel_justify.space_around` 类似，但边缘与子元素之间以及每个子节点之间的间距完全相同。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">要设置的节点。</Parameter>
 			<Parameter Name="justify" Optional="false" Type="Enum.flexpanel_justify">???使用该理由(The justification to use)</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_set_direction" Pure="false" ReturnType="Undefined">
-			<Description>设置所选节点的布局方向。</Description>
+			<Description>此函数设置所选节点的布局方向。这是该节点及其子节点的布局方向。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">要设置的节点。</Parameter>
 			<Parameter Name="direction" Optional="false" Type="Enum.flexpanel_direction">所选方向。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_set_margin" Pure="false" ReturnType="Undefined">
-			<Description>设置所选节点的边距。</Description>
+			<Description>此函数设置所选节点的页边距。页边距是节点外部周围的空间。您可以为所有边或为特定边定义它。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">要设置的节点。</Parameter>
 			<Parameter Name="edge" Optional="false" Type="Enum.flexpanel_edge">所选边。</Parameter>
 			<Parameter Name="size" Optional="false" Type="Real">所选的填充大小</Parameter>
 			<Parameter Name="unit" Optional="true" Type="Enum.flexpanel_unit">要使用的单位</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_set_padding" Pure="false" ReturnType="Undefined">
-			<Description>设置所选节点的填充。</Description>
+			<Description>此函数设置所选节点的内边距。内边距是节点内边缘与其子节点之间的间距。您可以为其定义所有边缘或特定边缘。对于未定义宽度/高度的节点，此操作将增加其宽度/高度。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">要设置的节点。</Parameter>
 			<Parameter Name="edge" Optional="false" Type="Enum.flexpanel_edge">所选边。</Parameter>
 			<Parameter Name="size" Optional="false" Type="Real">所选的填充大小</Parameter>
 			<Parameter Name="unit" Optional="true" Type="Enum.flexpanel_unit">要使用的单位</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_set_border" Pure="false" ReturnType="Undefined">
-			<Description>设置所选节点的边框。</Description>
+			<Description>此函数设置所选节点的边框。边框的作用与内边距相同。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">要设置的节点。</Parameter>
 			<Parameter Name="edge" Optional="false" Type="Enum.flexpanel_edge">所选边。</Parameter>
 			<Parameter Name="size" Optional="false" Type="Real">所选边框大小</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_set_position_type" Pure="false" ReturnType="Undefined">
-			<Description>设置节点的定位类型。</Description>
+			<Description>此函数设置节点的定位类型。节点的定位类型可以是以下字符串中的任意一个：* `flexpanel_position_type.relative` (默认)：此节点将参与其父容器的布局流，并在其中占用空间。内边距位置 (`flexpanel_edge.left`, `flexpanel_edge.top` 等) 将相对于该节点在布局流中的位置。 * `flexpanel_position_type.absolute`：此节点将从其父容器的布局流中移除，且不会占用空间。内边距位置将相对于包含块 (Containing Block)，该包含块可能不是其直接父级。 * `flexpanel_position_type.static`：该节点的行为类似于 `flexpanel_position_type.relative`，但它会忽略内边距，并且不会为其子节点创建包含块 (Containing Block)。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">要设置的节点。</Parameter>
 			<Parameter Name="value" Optional="false" Type="Enum.flexpanel_position_type">使用的位置类型</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_set_min_width" Pure="false" ReturnType="Undefined">
-			<Description>设置节点的最小宽度</Description>
+			<Description>此函数设置节点必须保持的最小宽度。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">需要设置行为的节点。</Parameter>
 			<Parameter Name="value" Optional="false" Type="Real">使用的值</Parameter>
 			<Parameter Name="unit" Optional="false" Type="Enum.flexpanel_unit">值使用的单位</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_set_max_width" Pure="false" ReturnType="Undefined">
-			<Description>设置节点的最大宽度</Description>
+			<Description>此函数设置节点必须保持的最大宽度。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">需要设置行为的节点。</Parameter>
 			<Parameter Name="value" Optional="false" Type="Real">使用的值</Parameter>
 			<Parameter Name="unit" Optional="false" Type="Enum.flexpanel_unit">值使用的单位</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_set_min_height" Pure="false" ReturnType="Undefined">
-			<Description>设置节点的最小高度</Description>
+			<Description>此函数设置节点必须保持的最小高度。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">需要设置行为的节点。</Parameter>
 			<Parameter Name="value" Optional="false" Type="Real">使用的值</Parameter>
 			<Parameter Name="unit" Optional="false" Type="Enum.flexpanel_unit">值使用的单位</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_set_max_height" Pure="false" ReturnType="Undefined">
-			<Description>设置节点的最大高度</Description>
+			<Description>此函数设置节点必须保持的最大高度。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">需要设置行为的节点。</Parameter>
 			<Parameter Name="value" Optional="false" Type="Real">使用的值</Parameter>
 			<Parameter Name="unit" Optional="false" Type="Enum.flexpanel_unit">值使用的单位</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_set_width" Pure="false" ReturnType="Undefined">
-			<Description>设置所选节点的宽度。</Description>
+			<Description>此函数设置所选节点的宽度。宽度是指节点的 &quot;border box&quot; 的宽度，即节点的 content、padding 和 border 的总大小。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">需要设置宽度的节点。</Parameter>
 			<Parameter Name="width" Optional="false" Type="Real">所选宽度。</Parameter>
 			<Parameter Name="unit" Optional="false" Type="Enum.flexpanel_unit">值使用的单位</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_set_height" Pure="false" ReturnType="Undefined">
-			<Description>设置所选节点的高度。</Description>
+			<Description>此函数设置所选节点的高度。高度是指节点的 &quot;border box&quot; 的高度，即节点的内容、内边距 (padding) 和边框 (border) 的总尺寸。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">需要设置高度的节点。</Parameter>
 			<Parameter Name="height" Optional="false" Type="Real">所选高度。</Parameter>
 			<Parameter Name="unit" Optional="false" Type="Enum.flexpanel_unit">值使用的单位</Parameter>
 		</Function>		
-		<Function Deprecated="false" Name="flexpanel_node_style_get_align_content" Pure="true" ReturnType="Enum.flexpanel_justify">
-			<Description>获取节点内容的对齐方式。</Description>
+		<Function Deprecated="false" Name="flexpanel_node_style_get_align_content" Pure="true" ReturnType="Enum.flexpanel_align">
+			<Description>此函数获取节点的对齐方式。如果 &quot;flex wrap&quot; 被设置为 `flexpanel_wrap.wrap` 或 `flexpanel_wrap.reverse`，则沿主轴溢出的任何项目将在交叉轴上跨新行进行布局。&quot;align content&quot; 属性控制这些换行后的行在交叉轴上的分布方式。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">节点。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_get_align_items" Pure="true" ReturnType="Enum.flexpanel_align">
-			<Description>获取节点的项的对齐方式。</Description>
+			<Description>此函数获取节点的项目对齐方式。这控制 flex 容器的非绝对定位子项沿其交叉轴（即与 flex 方向垂直的方向）的对齐方式</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">节点。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_get_align_self" Pure="true" ReturnType="Enum.flexpanel_align">
-			<Description>获取所选节点的对齐方式。</Description>
+			<Description>此函数获取所选节点的对齐方式。这与 &quot;align items&quot; 相同。不同之处在于，它不是应用于容器，而是直接应用于子节点，并影响其在容器内的交叉轴对齐。此属性会覆盖为其父容器设置的 &quot;align items&quot; 值。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">节点。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_get_aspect_ratio" Pure="true" ReturnType="Real">
-			<Description>获取节点的纵横比</Description>
+			<Description>此函数获取节点的宽高比。这是节点必须保持的宽高比，并与水平轴对应。例如，宽高比为 `1` 将得到一个正方形节点，`2` 将是一个宽是高两倍的 2:1 长方形，`0.5` 将使宽度为高度的一半。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">节点。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_get_display" Pure="true" ReturnType="Enum.flexpanel_display">
-			<Description>获取所选节点的显示设置。</Description>
+			<Description>此函数获取所选节点的显示设置。显示设置控制节点遵循哪种布局模式。它可以是以下值之一： * `flexpanel_display.flex` (默认): 默认布局行为。 * `flexpanel_display.none`: 禁用该节点。这在效果上等同于该节点已从树中移除，因为它不包含在任何计算中。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">节点。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_get_flex" Pure="true" ReturnType="Real">
-			<Description>获取所选节点的flex值。</Description>
+			<Description>此函数获取所选节点的 flex 值。Flex 是 &quot;flex grow&quot; 和 &quot;flex shrink&quot; 属性的缩写。当值为正数时，它将作为 &quot;flex grow&quot; 起作用；当值为负数时，它将作为 &quot;flex shrink&quot; 起作用。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">节点。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_get_flex_wrap" Pure="true" ReturnType="Enum.flexpanel_wrap">
-			<Description>获取所选节点的flex wrap属性。</Description>
+			<Description>此函数获取所选节点的 flex wrap。Flex wrap 控制当容器中的子元素在主轴上溢出时会发生什么。默认情况下，它们将根据其属性进行溢出或收缩。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">节点。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_get_flex_grow" Pure="true" ReturnType="Real">
-			<Description>获取所选节点的flex增长系数。</Description>
+			<Description>此函数获取所选节点的 flex grow。Flex grow 控制节点根据容器内的剩余空间在 flex 容器中增长的方式。它是一个正权重值，默认为 1。例如，如果有一个 400px 的容器，其中一个节点为 40px，而另一个节点的 &quot;flex grow&quot; 值为 `1`，则第二个节点将占据容器内的任何剩余空间。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">节点。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_get_flex_shrink" Pure="true" ReturnType="Real">
-			<Description>获取所选节点的flex收缩值。</Description>
+			<Description>此函数获取所选节点的 flex shrink。Flex shrink 控制当发生溢出时，该节点在其 flex 容器内的收缩程度。它是一个正权重值，默认值为 1。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">节点。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_get_flex_basis" Pure="true" ReturnType="Struct">
-			<Description>获取所选节点的 flex 基础(basis)值。</Description>
+			<Description>此函数获取所选节点的 flex basis。Flex basis 是项目在应用任何 flex grow 或 shrink 之前的默认大小。对于行容器，这会影响宽度；对于列容器，这会影响高度。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">节点。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_get_flex_direction" Pure="true" ReturnType="Enum.flexpanel_flex_direction">
-			<Description>获取所选节点的 flex 方向。</Description>
+			<Description>此函数获取所选节点的 flex direction。Flex direction 是该节点的非绝对定位子节点进行布局的方向。此方向被称为主轴，而与之垂直的方向被称为交叉轴。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">节点。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_get_gap" Pure="true" ReturnType="Real">
-			<Description>获取选定边上选定节点的gap(间隙)。</Description>
+			<Description>此函数获取所选节点在所选侧的间隙 (gap)。间隙是 flex 容器的每一行和每一列之间增加的距离，并会影响子节点之间的距离。您可以应用于两个轴，也可以仅应用于行或列。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">要设置的节点。</Parameter>
 			<Parameter Name="gutter" Optional="false" Type="Enum.flexpanel_gutter">所选装订线(gutter)（列/行/全部）。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_get_position" Pure="true" ReturnType="Struct">
-			<Description>获取节点的样式位置。</Description>
+			<Description>此函数获取节点的样式位置。内边距位置定义了节点边缘与其父节点相同边缘之间的距离，正值会将节点向中心移动，负值会将节点远离中心。例如，`left` 值为 `20` 将使节点的左边缘位于父节点左边缘右侧 20 像素处。`right` 值为 `40` 将移动节点，使其右边缘位于父节点右边缘左侧 40 像素处，且不改变节点的大小。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">节点。</Parameter>
 			<Parameter Name="edge" Optional="false" Type="Enum.flexpanel_edge">所选边。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_get_justify_content" Pure="true" ReturnType="Enum.flexpanel_justify">
-			<Description>获取节点的对齐方式</Description>
+			<Description>此函数获取节点的对齐方式。对齐方式控制 flex 容器的非绝对定位子元素沿其主轴 (即 &quot;flex direction&quot; 的方向) 的对齐方式。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">节点。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_get_direction" Pure="true" ReturnType="Enum.flexpanel_direction">
-			<Description>获取所选节点的方向。</Description>
+			<Description>此函数获取所选节点的方向。这是该节点及其子节点的布局方向。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">节点。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_get_margin" Pure="true" ReturnType="Struct">
-			<Description>获取所选节点的边距。</Description>
+			<Description>此函数获取所选节点的边距。边距是节点外部的间距。您可以为所有边或为特定边定义它。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">节点。</Parameter>
 			<Parameter Name="edge" Optional="false" Type="Enum.flexpanel_edge">所选边。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_get_padding" Pure="true" ReturnType="Struct">
-			<Description>获取所选节点的padding(内边距)。</Description>
+			<Description>此函数获取所选节点的内边距 (padding)。内边距是节点内边缘与其子节点之间的间距。您可以为所有边缘或为特定边缘定义它。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">节点。</Parameter>
 			<Parameter Name="edge" Optional="false" Type="Enum.flexpanel_edge">所选边。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_get_border" Pure="true" ReturnType="Real">
-			<Description>获取所选节点的border(边框)。</Description>
+			<Description>此函数获取所选节点的边框。边框的作用与内边距相同。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">节点。</Parameter>
 			<Parameter Name="edge" Optional="false" Type="Enum.flexpanel_edge">所选边。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_get_position_type" Pure="true" ReturnType="Enum.flexpanel_position_type">
-			<Description>获取节点位置类型</Description>
+			<Description>此函数获取节点的定位类型。节点的定位类型可以是以下字符串中的任何一个：* `flexpanel_position_type.relative` (默认): 此节点将参与其父容器的布局流，并占据其中的空间。内边距位置 (`flexpanel_edge.left`, `flexpanel_edge.top` 等) 将相对于该节点在布局流中的位置。 * `flexpanel_position_type.absolute`: 此节点将从其父容器的布局流中移除，且不会占据空间。内边距位置将相对于包含块 (Containing Block) 进行定位，该包含块可能不是其直接父容器。 * `flexpanel_position_type.static`: 该节点的行为类似于 `flexpanel_position_type.relative`，但它会忽略内边距，并且不会为其子节点构建包含块 (Containing Block)。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">节点。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_get_min_width" Pure="true" ReturnType="Struct">
-			<Description>获取节点的最小宽度</Description>
+			<Description>此函数获取节点必须维持的最小宽度。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">节点。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_get_max_width" Pure="true" ReturnType="Struct">
-			<Description>获取节点的最大宽度</Description>
+			<Description>此函数获取节点必须保持的最大宽度。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">节点。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_get_min_height" Pure="true" ReturnType="Struct">
-			<Description>获取节点的最小高度</Description>
+			<Description>此函数获取节点必须保持的最小高度。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">节点。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_get_max_height" Pure="true" ReturnType="Struct">
-			<Description>获取节点的最大高度</Description>
+			<Description>此函数获取节点必须保持的最大高度。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">节点。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_get_width" Pure="true" ReturnType="Struct">
-			<Description>获取所选节点的宽度。</Description>
+			<Description>此函数获取所选节点的宽度。宽度是指节点的 &quot;border box&quot; 的宽度，即节点的 content、padding 和 border 的总尺寸。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">节点。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="flexpanel_node_style_get_height" Pure="true" ReturnType="Struct">
-			<Description>获取所选节点的高度。</Description>
+			<Description>此函数获取所选节点的高度。高度是指节点的 &quot;border box&quot; 的高度，即节点的内容、内边距 (padding) 和边框 (border) 的总尺寸。</Description>
 			<Parameter Name="node" Optional="false" Type="Pointer.FlexpanelNode">节点。</Parameter>
-		</Function>		
+		</Function>
 		<Function Deprecated="false" Name="font_add" Pure="false" ReturnType="Asset.GMFont">
 			<Description>此函数可以用来从包含文件中的字体文件中添加字体到游戏中。如果函数因任何原因失败，将返回 -1。</Description>
 			<Parameter Name="name" Optional="false" Type="String">包含文件(*.ttf或*.otf)中的字体文件的路径。</Parameter>
@@ -2032,6 +2033,16 @@
 			<Parameter Name="sequence_element_id" Optional="false" Type="Id.SequenceElement">目标序列元素的唯一ID值</Parameter>
 			<Parameter Name="yscale" Optional="false" Type="Real">应用于序列元素的新的Y轴比例值</Parameter>
 		</Function>
+		<Function Deprecated="false" Name="layer_sequence_alpha" Pure="false" ReturnType="Undefined">
+			<Description>通过此函数，您可以为给定的序列元素设置图像 alpha。</Description>
+			<Parameter Name="sequence_element_id" Optional="false" Type="Id.SequenceElement">目标序列元素的唯一ID值</Parameter>
+			<Parameter Name="alpha" Optional="false" Type="Real">用于设置序列元素的图像 alpha 值</Parameter>
+		</Function>
+		<Function Deprecated="false" Name="layer_sequence_blend" Pure="false" ReturnType="Undefined">
+			<Description>通过此函数，您可以为给定的序列元素设置图像混合。</Description>
+			<Parameter Name="sequence_element_id" Optional="false" Type="Id.SequenceElement">目标序列元素的唯一ID值</Parameter>
+			<Parameter Name="blend" Optional="false" Type="Constant.Color">用于与序列元素混合的颜色</Parameter>
+		</Function>
 		<Function Deprecated="false" Name="layer_sprite_alpha" Pure="false" ReturnType="Undefined">
 			<Description>此函数控制资源层精灵的alpha(透明度)。</Description>
 			<Parameter Name="sprite_element_id" Optional="false" Type="Id.SpriteElement">要更改的精灵元素的唯一ID值</Parameter>
@@ -2791,7 +2802,7 @@
 			<Description>此函数替换当前实例骨骼动画精灵上现有的自定义附件，并设置绘制此附件时使用的混合颜色。</Description>
 			<Parameter Name="name" Optional="false" Type="String">要创建的附件的名称(字符串形式)。</Parameter>
 			<Parameter Name="sprite" Optional="false" Type="Asset.GMSprite">从中获取附件图像的sprite_index。</Parameter>
-			<Parameter Name="ind" Optional="false" Type="Real">要从中获取附件图像的image_index。</Parameter>
+			<Parameter Name="ind" Optional="false" Type="Real">用于获取附件图像的图像索引。</Parameter>
 			<Parameter Name="xorigin" Optional="false" Type="Real">正在使用的图像的x原点。</Parameter>
 			<Parameter Name="yorigin" Optional="false" Type="Real">正在使用的图像的y原点。</Parameter>
 			<Parameter Name="xscale" Optional="false" Type="Real">图像的横向缩放，作为乘数: 1 = 正常缩放，0.5是一半，以此类推...</Parameter>
@@ -2800,7 +2811,20 @@
 			<Parameter Name="colour" Optional="false" Type="Constant.Color">要使用的颜色值(常量、整数或十六进制值)。</Parameter>
 			<Parameter Name="alpha" Optional="false" Type="Real">要使用的透明度(Alpha)值(从0到1)。</Parameter>
 		</Function>
-		<Function Deprecated="false" Locale="GB" Name="skeleton_attachment_destroy" Pure="false" ReturnType="Any">
+		<Function Deprecated="false" Locale="US" Name="skeleton_attachment_replace_color" Pure="true" ReturnType="Any">
+			<Description>此函数将当前实例的骨骼动画精灵上现有的自定义挂载替换为另一个，并设置绘制此挂载时使用的混合颜色。</Description>
+			<Parameter Name="name" Optional="false" Type="String">要创建的附件的名称(字符串形式)。</Parameter>
+			<Parameter Name="sprite" Optional="false" Type="Asset.GMSprite">从中获取附件图像的sprite_index。</Parameter>
+			<Parameter Name="ind" Optional="false" Type="Real">用于获取附件图像的图像索引。</Parameter>
+			<Parameter Name="xorigin" Optional="false" Type="Real">正在使用的图像的x原点。</Parameter>
+			<Parameter Name="yorigin" Optional="false" Type="Real">正在使用的图像的y原点。</Parameter>
+			<Parameter Name="xscale" Optional="false" Type="Real">图像的横向缩放，作为乘数: 1 = 正常缩放，0.5是一半，以此类推...</Parameter>
+			<Parameter Name="yscale" Optional="false" Type="Real">图像的垂直缩放，作为乘数: 1 = 正常缩放，0.5是一半，以此类推...</Parameter>
+			<Parameter Name="rot" Optional="false" Type="Real">图像的旋转: 0 = 正常，90 = 逆时针旋转90°等。</Parameter>
+			<Parameter Name="color" Optional="false" Type="Constant.Color">要使用的颜色值（常量、整数或十六进制值）。</Parameter>
+			<Parameter Name="alpha" Optional="false" Type="Real">要使用的透明度(Alpha)值(从0到1)。</Parameter>
+		</Function>
+		<Function Deprecated="false" Name="skeleton_attachment_destroy" Pure="false" ReturnType="Any">
 			<Description>此函数销毁先前使用skeleton_attachment_create()或skeleton_attachment_replace()函数创建的自定义附件。任何使用附件的插槽都将被清除。</Description>
 			<Parameter Name="name" Optional="false" Type="String">要销毁的附件的名称(字符串形式)。</Parameter>
 		</Function>
@@ -5544,10 +5568,10 @@
 		</Function>
 		<Function Deprecated="false" Name="gpu_set_fog" Pure="false" ReturnType="Undefined">
 			<Description>此函数可用于启用或禁用拉雾。</Description>
-			<Parameter Name="enable" Optional="false" Type="Bool">启用或禁用雾</Parameter>
-			<Parameter Name="colour" Optional="false" Type="Constant.Color">雾的颜色</Parameter>
-			<Parameter Name="start" Optional="false" Type="Real">开始应用雾的距离</Parameter>
-			<Parameter Name="end" Optional="false" Type="Real">结束雾的距离</Parameter>
+			<Parameter Name="enableOrArray" Optional="false" Type="Bool, Array">启用或禁用雾，或者传递一个包含 {enable,colour,start,end} 的 4 值数组 (由 gpu_get_fog 返回)</Parameter>
+			<Parameter Name="colour" Optional="true" Type="Constant.Color">雾的颜色</Parameter>
+			<Parameter Name="start" Optional="true" Type="Real">开始应用雾的距离</Parameter>
+			<Parameter Name="end" Optional="true" Type="Real">结束雾的距离</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="gpu_set_scissor" Pure="false" ReturnType="Undefined">
 			<Description>此函数可用于设置剪裁区域，该区域将裁剪所有渲染到当前渲染目标。所有坐标均以渲染目标坐标系为单位。注意：所有值均用整数表示。注意：每个表面和视口将重置当前剪刀区域（它们不是堆叠的）。</Description>
@@ -8878,7 +8902,7 @@
 			<Parameter Name="port" Optional="false" Type="Real">要连接的端口。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="network_connect_async" Pure="false" ReturnType="Real">
-			<Description>通过此函数，您可以发送连接到服务器的请求。函数需要连接的套接字 ID，以及要连接到的 IP 地址和端口。如果连接失败，则返回小于 0 的值。该连接使用一个特殊的协议，以确保只有GameMaker游戏彼此连接，但如果你需要连接到一个非GameMaker游戏的服务器，你可以使用network_connect_async_raw()。</Description>
+			<Description>通过此函数你可以发送连接到服务器的请求。该函数需要通过 socket id 进行连接，并且需要你提供要连接的 IP 地址以及要连接的端口，如果连接失败，将返回一个小于 0 的值。该连接使用一种特殊的协议，以确保只有 GameMaker 游戏彼此连接，但是如果你需要连接到不是 GameMaker 游戏的服务器，你可以使用 network_connect_raw_async()。</Description>
 			<Parameter Name="socket" Optional="false" Type="Id.Socket">要使用的套接字的id。</Parameter>
 			<Parameter Name="url" Optional="false" Type="String">连接到的URL或IP地址。</Parameter>
 			<Parameter Name="port" Optional="false" Type="Real">要连接的端口。</Parameter>
@@ -9079,72 +9103,72 @@
 			<Parameter Name="xpos" Optional="false" Type="Real">要检查的房间中的x位置</Parameter>
 			<Parameter Name="ypos" Optional="false" Type="Real">要检查的房间中的y位置</Parameter>
 			<Parameter Name="angle" Optional="false" Type="Real">(调用实例的)要检查的角度</Parameter>
-			<Parameter Name="obj" Optional="false" Type="Id.Instance,Asset.GMObject,Constant.All">用于检查的对象索引或实例ID，或者关键字all或other</Parameter>
+			<Parameter Name="obj" Optional="false" Type="Id.Instance,Asset.GMObject,Constant.Other,Constant.All">用于检查的对象索引或实例ID，或者关键字all或other</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="physics_fixture_add_point" Pure="false" ReturnType="Undefined">
 			<Description>此函数定义了多边形的点，该多边形已使用physics_fixture_set_polygon_shape()函数设置为固定装置，或者可以使用此函数将点添加到边缘固定装置的链中。对于多边形形状，点是相对于固定装置的原点的相对位置，x/y轴的(0, 0)位置为中心，后续坐标的计算方式与GameMaker中通常一样，向右下方为+x,+y，向上左方为-x,-y。</Description>
-			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsIndex">固定装置的索引</Parameter>
+			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsFixture">固定装置的索引</Parameter>
 			<Parameter Name="xpos" Optional="false" Type="Real">点的x坐标（相对于多边形形状的固定装置原点）</Parameter>
 			<Parameter Name="ypos" Optional="false" Type="Real">点y坐标（相对于多边形形状的固定装置原点）</Parameter>
 		</Function>
-		<Function Deprecated="false" Name="physics_fixture_bind" Pure="false" ReturnType="Real">
+		<Function Deprecated="false" Name="physics_fixture_bind" Pure="false" ReturnType="Id.PhysicsFixtureBound">
 			<Description>此函数将给定的固定装置绑定到给定的目标对象或实例，并返回绑定的固定装置的ID。</Description>
-			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsIndex">要绑定的固定装置</Parameter>
-			<Parameter Name="target" Optional="false" Type="Id.Instance,Asset.GMObject,Constant.All">接收固定装置的目标实例（可以是实例 ID、对象 ID、 other, 或 all)）</Parameter>
+			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsFixture">要绑定的固定装置</Parameter>
+			<Parameter Name="target" Optional="false" Type="Id.Instance,Asset.GMObject,Constant.Other,Constant.All">接收固定装置的目标实例（可以是实例 ID、对象 ID、 other, 或 all)）</Parameter>
 		</Function>
-		<Function Deprecated="false" Name="physics_fixture_bind_ext" Pure="false" ReturnType="Real">
+		<Function Deprecated="false" Name="physics_fixture_bind_ext" Pure="false" ReturnType="Id.PhysicsFixtureBound">
 			<Description>此函数将给定的固定装置绑定到给定的目标对象或实例，并在偏移量处返回绑定的固定装置的ID。请注意，一个固定装置只能支持单个偏移量，因为将多个偏移量添加到单个固定装置不受 Box2D 支持。</Description>
-			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsIndex">要绑定的固定装置</Parameter>
-			<Parameter Name="target" Optional="false" Type="Id.Instance,Asset.GMObject,Constant.All">接收固定装置的目标实例（可以是实例 ID、对象 ID、 other, 或 all)）</Parameter>
+			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsFixture">要绑定的固定装置</Parameter>
+			<Parameter Name="target" Optional="false" Type="Id.Instance,Asset.GMObject,Constant.Other,Constant.All">接收固定装置的目标实例（可以是实例 ID、对象 ID、 other, 或 all)）</Parameter>
 			<Parameter Name="xoffset" Optional="false" Type="Real">x轴的偏移量</Parameter>
 			<Parameter Name="yoffset" Optional="false" Type="Real">y轴的偏移量</Parameter>
 		</Function>
-		<Function Deprecated="false" Name="physics_fixture_create" Pure="false" ReturnType="Id.PhysicsIndex">
+		<Function Deprecated="false" Name="physics_fixture_create" Pure="false" ReturnType="Id.PhysicsFixture">
 			<Description>此函数创建新的物理固定装置。</Description>
 		</Function>
 		<Function Deprecated="false" Name="physics_fixture_delete" Pure="false" ReturnType="Undefined">
 			<Description>此函数删除给定的固定装置，释放其使用的内存。</Description>
-			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsIndex">要从内存中删除的固定装置</Parameter>
+			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsFixture">要从内存中删除的固定装置</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="physics_fixture_set_angular_damping" Pure="false" ReturnType="Undefined">
 			<Description>此函数设置给定固定装置的角阻尼。通常情况下，您将使用0到1之间的阻尼值，但如果需要，您也可以使用任何非负值。</Description>
-			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsIndex">固定装置的索引</Parameter>
+			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsFixture">固定装置的索引</Parameter>
 			<Parameter Name="damping" Optional="false" Type="Real">固定装置的角阻尼，通常在0到1之间</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="physics_fixture_set_awake" Pure="false" ReturnType="Undefined">
 			<Description>此函数设置给定的物理固定装置是否应该“ 唤醒(awake)”（即它是否正在处理事件并与周围实例进行交互）。</Description>
-			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsIndex">要绑定的固定装置的 ID</Parameter>
+			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsFixture">要绑定的固定装置的 ID</Parameter>
 			<Parameter Name="flag" Optional="false" Type="Bool">固定装置是否处于唤醒状态（true）或未唤醒状态（false）。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="physics_fixture_set_box_shape" Pure="false" ReturnType="Undefined">
 			<Description>此函数定义了给定固定装置的盒状形状。它采用半宽和半高，因为物理世界使用这个值远多于整个宽度/高度值来确定碰撞之类的事情。</Description>
-			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsIndex">固定装置的索引</Parameter>
+			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsFixture">固定装置的索引</Parameter>
 			<Parameter Name="half_width" Optional="false" Type="Real">盒子的半宽</Parameter>
 			<Parameter Name="half_height" Optional="false" Type="Real">盒子的半高</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="physics_fixture_set_chain_shape" Pure="false" ReturnType="Undefined">
 			<Description>此函数告知给定的固定装置使用“链”形状，该形状由一系列用边形连接的点组成。点是在调用此函数后，使用physics_fixture_add_point()指定的。</Description>
-			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsIndex">固定装置的索引</Parameter>
+			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsFixture">固定装置的索引</Parameter>
 			<Parameter Name="loop" Optional="false" Type="Bool">是否关闭链(true)或不(false)</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="physics_fixture_set_circle_shape" Pure="false" ReturnType="Undefined">
 			<Description>此函数为夹具定义一个圆形，其半径由参数&quot;rad&quot;定义。</Description>
-			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsIndex">固定装置的索引</Parameter>
+			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsFixture">固定装置的索引</Parameter>
 			<Parameter Name="rad" Optional="false" Type="Real">圆的半径</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="physics_fixture_set_collision_group" Pure="false" ReturnType="Undefined">
 			<Description>此函数将碰撞组分配给给定的固定装置。</Description>
-			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsIndex">要绑定的固定装置</Parameter>
+			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsFixture">要绑定的固定装置</Parameter>
 			<Parameter Name="group" Optional="false" Type="Real">此fixture被分配给的组(可以是正值、0或负值)</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="physics_fixture_set_density" Pure="false" ReturnType="Undefined">
 			<Description>此函数设置给定物理固定装置的密度。</Description>
-			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsIndex">固定装置的索引</Parameter>
+			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsFixture">固定装置的索引</Parameter>
 			<Parameter Name="density" Optional="false" Type="Real">夹具的密度计算为kg/m²</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="physics_fixture_set_edge_shape" Pure="false" ReturnType="Undefined">
-			<Description>此函数定义了给定固定装置的“边”形状。</Description>
-			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsIndex">固定装置的索引</Parameter>
+			<Description>此函数为给定的固定装置定义一个 &quot;edge&quot; 形状。</Description>
+			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsFixture">固定装置的索引</Parameter>
 			<Parameter Name="local_x1" Optional="false" Type="Real">边缘的起始x位置</Parameter>
 			<Parameter Name="local_y1" Optional="false" Type="Real">边缘的起始y位置</Parameter>
 			<Parameter Name="local_x2" Optional="false" Type="Real">边缘的结束x位置</Parameter>
@@ -9152,58 +9176,58 @@
 		</Function>
 		<Function Deprecated="false" Name="physics_fixture_set_friction" Pure="false" ReturnType="Undefined">
 			<Description>此函数设置给定物理固定装置的摩擦力。注意，摩擦通常设置为0到1之间的值，但如果需要，也可以使用任何非负值。</Description>
-			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsIndex">固定装置的索引</Parameter>
+			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsFixture">固定装置的索引</Parameter>
 			<Parameter Name="friction" Optional="false" Type="Real">夹具的摩擦力</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="physics_fixture_set_kinematic" Pure="false" ReturnType="Undefined">
 			<Description>此函数将给定的物理固定装置设置为运动学（运动学固定装置不受任何力的影响）。</Description>
-			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsIndex">固定装置的索引</Parameter>
+			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsFixture">固定装置的索引</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="physics_fixture_set_linear_damping" Pure="false" ReturnType="Undefined">
 			<Description>此函数设置给定固定装置的线性阻尼。阻尼参数应该在0到无穷大之间，0表示无阻尼，无穷大表示有阻尼。通常情况下，您将使用0到1之间的阻尼值，但如果需要，您也可以使用任何非负值。</Description>
-			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsIndex">固定装置的索引</Parameter>
+			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsFixture">固定装置的索引</Parameter>
 			<Parameter Name="damping" Optional="false" Type="Real">固定装置的阻尼，通常在 0 到 1 之间</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="physics_fixture_set_polygon_shape" Pure="false" ReturnType="Undefined">
 			<Description>此函数告知给定的固定装置使用多边形形状。必须在调用此函数后，使用physics_fixture_add_point()指定点。</Description>
-			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsIndex">固定装置的索引</Parameter>
+			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsFixture">固定装置的索引</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="physics_fixture_set_restitution" Pure="false" ReturnType="Undefined">
 			<Description>此函数设置给定物理固定装置的恢复系数。</Description>
-			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsIndex">固定装置的索引</Parameter>
+			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsFixture">固定装置的索引</Parameter>
 			<Parameter Name="restitution" Optional="false" Type="Real">固定装置的恢复值（通常在 0 到 1 之间）</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="physics_fixture_set_sensor" Pure="false" ReturnType="Undefined">
 			<Description>此函数设置给定的固定装置是否应为传感器。</Description>
-			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsIndex">固定装置的索引</Parameter>
+			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsFixture">固定装置的索引</Parameter>
 			<Parameter Name="state" Optional="false" Type="Bool">固定装置是否是传感器(true)或不(false)</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="physics_get_density" Pure="true" ReturnType="Real">
 			<Description>此函数返回给定固定装置的密度。</Description>
-			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsIndex">要绑定的固定装置的 ID</Parameter>
+			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsFixtureBound">要绑定的固定装置的 ID</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="physics_get_restitution" Pure="true" ReturnType="Real">
 			<Description>此函数返回给定固定装置的恢复值。</Description>
-			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsIndex">要绑定的固定装置的 ID</Parameter>
+			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsFixtureBound">要绑定的固定装置的 ID</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="physics_remove_fixture" Pure="false" ReturnType="Undefined">
 			<Description>此函数从一个或多个实例中删除(或&quot;取消绑定&quot;)一个夹具。这允许您重新定义一个新的固定装置，并将它绑定到实例上。通过这种方式，您可以更改实例的物理属性，而不必销毁和重新创建它。</Description>
-			<Parameter Name="id" Optional="false" Type="Id.Instance">要从中删除固定装置的实例的ID</Parameter>
-			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsIndex">要从实例中删除的固定装置的ID</Parameter>
+			<Parameter Name="id" Optional="false" Type="Id.Instance,Asset.GMObject">要从中删除固定装置的实例的ID</Parameter>
+			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsFixtureBound">要从实例中移除的绑定的固定装置的 ID</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="physics_set_density" Pure="false" ReturnType="Undefined">
 			<Description>此函数设置给定固定装置的密度值。</Description>
-			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsIndex">要绑定的固定装置的 ID</Parameter>
+			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsFixtureBound">要绑定的固定装置的 ID</Parameter>
 			<Parameter Name="density" Optional="false" Type="Real">要应用的新密度值</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="physics_set_friction" Pure="false" ReturnType="Undefined">
 			<Description>此函数设置给定固定装置的摩擦值。</Description>
-			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsIndex">要绑定的固定装置的 ID</Parameter>
+			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsFixtureBound">要绑定的固定装置的 ID</Parameter>
 			<Parameter Name="friction" Optional="false" Type="Real">要应用新摩擦值</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="physics_set_restitution" Pure="false" ReturnType="Undefined">
 			<Description>这个函数设置给定绑定固定装置的恢复值。</Description>
-			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsIndex">要绑定的固定装置的 ID</Parameter>
+			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsFixtureBound">要绑定的固定装置的 ID</Parameter>
 			<Parameter Name="restitution" Optional="false" Type="Real">要应用的新恢复值</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="physics_apply_angular_impulse" Pure="false" ReturnType="Undefined">
@@ -9244,9 +9268,9 @@
 		</Function>
 		<Function Deprecated="false" Name="physics_joint_delete" Pure="false" ReturnType="Undefined">
 			<Description>此函数删除给定的物理关节。</Description>
-			<Parameter Name="joint" Optional="false" Type="Id.PhysicsIndex">要删除的关节的索引</Parameter>
+			<Parameter Name="joint" Optional="false" Type="Id.PhysicsJoint">要删除的关节的索引</Parameter>
 		</Function>
-		<Function Deprecated="false" Name="physics_joint_distance_create" Pure="false" ReturnType="Id.PhysicsIndex">
+		<Function Deprecated="false" Name="physics_joint_distance_create" Pure="false" ReturnType="Id.PhysicsJoint">
 			<Description>此函数在两个物理实例之间创建关节。距离关节是最简单的关节之一，它表示两个实例中两点之间的距离必须是常数。</Description>
 			<Parameter Name="inst1" Optional="false" Type="Id.Instance">与关节连接的第一个实例</Parameter>
 			<Parameter Name="inst2" Optional="false" Type="Id.Instance">用关节连接的第二个实例</Parameter>
@@ -9258,10 +9282,10 @@
 		</Function>
 		<Function Deprecated="false" Name="physics_joint_enable_motor" Pure="false" ReturnType="Undefined">
 			<Description>此函数设置是否启用或禁用具有马达的物理关节上的马达。</Description>
-			<Parameter Name="joint" Optional="false" Type="Id.PhysicsIndex">您希望启用或禁用马达的关节</Parameter>
+			<Parameter Name="joint" Optional="false" Type="Id.PhysicsJoint">您希望启用或禁用马达的关节</Parameter>
 			<Parameter Name="motor" Optional="false" Type="Bool">您是希望打开马达(true) 或不 (false)</Parameter>
 		</Function>
-		<Function Deprecated="false" Name="physics_joint_friction_create" Pure="false" ReturnType="Id.PhysicsIndex">
+		<Function Deprecated="false" Name="physics_joint_friction_create" Pure="false" ReturnType="Id.PhysicsJoint">
 			<Description>此函数在两个物理实例之间创建摩擦关节。摩擦关节与其他物理模拟中的关节略有不同，它创建的连接不会限制实例的位置或运动，而是会限制其速度和旋转。</Description>
 			<Parameter Name="inst1" Optional="false" Type="Id.Instance">与关节连接的第一个实例</Parameter>
 			<Parameter Name="inst2" Optional="false" Type="Id.Instance">用关节连接的第二个实例</Parameter>
@@ -9271,20 +9295,20 @@
 			<Parameter Name="max_torque" Optional="false" Type="Real">将施加的最大旋转力</Parameter>
 			<Parameter Name="col" Optional="false" Type="Bool">两个实例是否会碰撞 (true) 或不 (false)</Parameter>
 		</Function>
-		<Function Deprecated="false" Name="physics_joint_gear_create" Pure="false" ReturnType="Id.PhysicsIndex">
+		<Function Deprecated="false" Name="physics_joint_gear_create" Pure="false" ReturnType="Id.PhysicsJoint">
 			<Description>此函数在两个物理实例之间创建一个齿轮连接。</Description>
 			<Parameter Name="inst1" Optional="false" Type="Id.Instance">与关节连接的第一个实例</Parameter>
 			<Parameter Name="inst2" Optional="false" Type="Id.Instance">用关节连接的第二个实例</Parameter>
-			<Parameter Name="joint_1" Optional="false" Type="Id.PhysicsIndex">先前定义的转动关节</Parameter>
-			<Parameter Name="joint_2" Optional="false" Type="Id.PhysicsIndex">转动关节先前定义的转动关节或移动关节</Parameter>
+			<Parameter Name="joint_1" Optional="false" Type="Id.PhysicsJoint">先前定义的转动关节</Parameter>
+			<Parameter Name="joint_2" Optional="false" Type="Id.PhysicsJoint">转动关节先前定义的转动关节或移动关节</Parameter>
 			<Parameter Name="ratio" Optional="false" Type="Real">设置两个关节之间的速度比</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="physics_joint_get_value" Pure="true" ReturnType="Real">
 			<Description>此函数返回与给定关节常数对应的关节属性的值。</Description>
-			<Parameter Name="joint" Optional="false" Type="Id.PhysicsIndex">您希望测试的关节的索引</Parameter>
+			<Parameter Name="joint" Optional="false" Type="Id.PhysicsJoint">您希望测试的关节的索引</Parameter>
 			<Parameter Name="value" Optional="false" Type="Constant.PhysicsJointProperty">你想要测试的关节性质的常量</Parameter>
 		</Function>
-		<Function Deprecated="false" Name="physics_joint_prismatic_create" Pure="false" ReturnType="Id.PhysicsIndex">
+		<Function Deprecated="false" Name="physics_joint_prismatic_create" Pure="false" ReturnType="Id.PhysicsJoint">
 			<Description>此函数在两个物理实例之间创建棱柱关节。像转动关节一样，移动关节只有一个自由度，但这个关节相对于轴是有方向的，而不是旋转的，实际上阻止了任何形式的旋转。</Description>
 			<Parameter Name="inst1" Optional="false" Type="Id.Instance">与关节连接的第一个实例</Parameter>
 			<Parameter Name="inst2" Optional="false" Type="Id.Instance">用关节连接的第二个实例</Parameter>
@@ -9300,7 +9324,7 @@
 			<Parameter Name="motor" Optional="false" Type="Bool">马达是否应活动(true)或不(false)</Parameter>
 			<Parameter Name="col" Optional="false" Type="Bool">两个实例是否会碰撞 (true) 或不 (false)</Parameter>
 		</Function>
-		<Function Deprecated="false" Name="physics_joint_pulley_create" Pure="false" ReturnType="Id.PhysicsIndex">
+		<Function Deprecated="false" Name="physics_joint_pulley_create" Pure="false" ReturnType="Id.PhysicsJoint">
 			<Description>此函数在两个物理实例之间创建滑轮关节。滑轮连接用于连接物理世界中的两个实例，其中一个的移动将直接影响另一个的移动。</Description>
 			<Parameter Name="inst1" Optional="false" Type="Id.Instance">与关节连接的第一个实例</Parameter>
 			<Parameter Name="inst2" Optional="false" Type="Id.Instance">用关节连接的第二个实例</Parameter>
@@ -9315,7 +9339,7 @@
 			<Parameter Name="ratio" Optional="false" Type="Id.Instance">设置两个实例之间的速度比</Parameter>
 			<Parameter Name="col" Optional="false" Type="Bool">两个实例是否会碰撞 (true) 或不 (false)</Parameter>
 		</Function>
-		<Function Deprecated="false" Name="physics_joint_revolute_create" Pure="false" ReturnType="Id.PhysicsIndex">
+		<Function Deprecated="false" Name="physics_joint_revolute_create" Pure="false" ReturnType="Id.PhysicsJoint">
 			<Description>此函数在两个物理实例之间创建旋转关节。转动关节迫使两个物体共用一个锚点(通常称为铰链点)，关节只有一个自由度——两个物体围绕这个点的相对旋转。</Description>
 			<Parameter Name="inst1" Optional="false" Type="Id.Instance">与关节连接的第一个实例</Parameter>
 			<Parameter Name="inst2" Optional="false" Type="Id.Instance">用关节连接的第二个实例</Parameter>
@@ -9329,7 +9353,7 @@
 			<Parameter Name="motor" Optional="false" Type="Bool">马达是否应活动(true)或不(false)</Parameter>
 			<Parameter Name="col" Optional="false" Type="Bool">两个实例是否会碰撞 (true) 或不 (false)</Parameter>
 		</Function>
-		<Function Deprecated="false" Name="physics_joint_rope_create" Pure="false" ReturnType="Id.PhysicsIndex">
+		<Function Deprecated="false" Name="physics_joint_rope_create" Pure="false" ReturnType="Id.PhysicsJoint">
 			<Description>此函数在两个物理实例之间创建绳索连接。绳子连接是用来连接两个实例，你想要保持一个恒定的距离，无论其他的力作用在它上面。</Description>
 			<Parameter Name="inst1" Optional="false" Type="Id.Instance">与关节连接的第一个实例</Parameter>
 			<Parameter Name="inst2" Optional="false" Type="Id.Instance">用关节连接的第二个实例</Parameter>
@@ -9342,11 +9366,11 @@
 		</Function>
 		<Function Deprecated="false" Name="physics_joint_set_value" Pure="false" ReturnType="Undefined">
 			<Description>此函数将给定关节常数对应的关节属性值设置为给定的值。</Description>
-			<Parameter Name="joint" Optional="false" Type="Id.PhysicsIndex">您希望更改的关节的索引</Parameter>
+			<Parameter Name="joint" Optional="false" Type="Id.PhysicsJoint">您希望更改的关节的索引</Parameter>
 			<Parameter Name="field" Optional="false" Type="Constant.PhysicsJointProperty">你想要改变的关节属性的常量</Parameter>
 			<Parameter Name="value" Optional="false" Type="Any">共同属性的新值</Parameter>
 		</Function>
-		<Function Deprecated="false" Name="physics_joint_weld_create" Pure="false" ReturnType="Id.PhysicsIndex">
+		<Function Deprecated="false" Name="physics_joint_weld_create" Pure="false" ReturnType="Id.PhysicsJoint">
 			<Description>此函数在两个物理实例之间创建焊接接头。焊接接头的设计目的是将两个固定装置连接在一起，使其牢固而灵活，并且允许两个连接的固定装置之间弯曲，但不会产生与距离连接相关的拉伸，并且在受到任何压力或负载时总是试图“弹回”到参考角度。</Description>
 			<Parameter Name="inst1" Optional="false" Type="Id.Instance">与关节连接的第一个实例</Parameter>
 			<Parameter Name="inst2" Optional="false" Type="Id.Instance">用关节连接的第二个实例</Parameter>
@@ -9357,7 +9381,7 @@
 			<Parameter Name="damping_ratio" Optional="false" Type="Real">这个关节的阻尼比</Parameter>
 			<Parameter Name="col" Optional="false" Type="Bool">两个实例是否会碰撞 (true) 或不 (false)</Parameter>
 		</Function>
-		<Function Deprecated="false" Name="physics_joint_wheel_create" Pure="false" ReturnType="Id.PhysicsIndex">
+		<Function Deprecated="false" Name="physics_joint_wheel_create" Pure="false" ReturnType="Id.PhysicsJoint">
 			<Description>此函数在两个物理实例之间创建轮关节。一个轮关节结合了活塞和旋转关节，就像一辆汽车减震器上的车轮一样。</Description>
 			<Parameter Name="inst1" Optional="false" Type="Id.Instance">与关节连接的第一个实例</Parameter>
 			<Parameter Name="inst2" Optional="false" Type="Id.Instance">用关节连接的第二个实例</Parameter>
@@ -9375,7 +9399,7 @@
 		<Function Deprecated="false" Name="physics_particle_count" Pure="true" ReturnType="Real">
 			<Description>此函数将返回物理房间中活跃的粒子数量。</Description>
 		</Function>
-		<Function Deprecated="false" Name="physics_particle_create" Pure="false" ReturnType="Id.PhysicsIndex">
+		<Function Deprecated="false" Name="physics_particle_create" Pure="false" ReturnType="Id.PhysicsParticle">
 			<Description>通过此函数，你可以在游戏房间的任何地方创建一个粒子，设置一些标志和属性。</Description>
 			<Parameter Name="flags" Optional="false" Type="Constant.PhysicsParticleFlag">要在粒子上设置的标志。</Parameter>
 			<Parameter Name="x" Optional="false" Type="Real">创建粒子的x位置。</Parameter>
@@ -9388,7 +9412,7 @@
 		</Function>
 		<Function Deprecated="false" Name="physics_particle_delete" Pure="false" ReturnType="Undefined">
 			<Description>通过此函数，您可以从当前房间的物理模拟中删除一个粒子。</Description>
-			<Parameter Name="ind" Optional="false" Type="Id.PhysicsIndex">要删除的粒子的索引(ID)。</Parameter>
+			<Parameter Name="ind" Optional="false" Type="Id.PhysicsParticle">要删除的粒子的索引(ID)。</Parameter>
 		</Function>
 		<Function Deprecated="false" Name="physics_particle_delete_region_box" Pure="false" ReturnType="Undefined">
 			<Description>通过此函数，您可以从当前房间的物理模拟中删除落在已定义矩形区域边界内的所有粒子。</Description>
@@ -11147,7 +11171,7 @@
 		</Function>
 		<Function Deprecated="false" Name="physics_get_friction" Pure="true" ReturnType="Real">
 			<Description>此函数获取给定固定装置的摩擦值（不是“base”固定装置）。</Description>
-			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsIndex"/>
+			<Parameter Name="fixture" Optional="false" Type="Id.PhysicsFixtureBound"/>
 		</Function>
 		<Function Deprecated="false" Name="physics_particle_group_get_mass" Pure="true" ReturnType="Real">
 			<Description>使用此函数，您可以检索整个粒子组的质量。</Description>
@@ -12016,7 +12040,7 @@
 		<Constant Class="SequenceTrackType" Deprecated="false" Name="seqtracktype_clipmask_mask" Type="Real">这是用于生成剪切蒙版的剪切蒙版精灵资源轨道。</Constant>
 		<Constant Class="SequenceTrackType" Deprecated="false" Name="seqtracktype_clipmask_subject" Type="Real">这是一个被遮罩的剪切蒙版精灵资源轨道。</Constant>
 		<Constant Class="SequenceTrackType" Deprecated="false" Name="seqtracktype_group" Type="Real">这是一个组文件夹资源轨道。</Constant>
-		<Constant Class="SequenceTrackType" Deprecated="false" Name="seqtracktype_colour" Type="Real">这是一个颜色数据参数轨道。</Constant>
+		<Constant Class="SequenceTrackType" Deprecated="false" Locale="GB" Name="seqtracktype_colour" Type="Real">这是一个颜色数据参数轨道。</Constant>
 		<Constant Class="SequenceTrackType" Deprecated="false" Name="seqtracktype_real" Type="Real">这是一个实数值参数轨道。</Constant>
 		<Constant Class="SequenceTrackType" Deprecated="false" Name="seqtracktype_message" Type="Real">这是一个广播消息轨道。</Constant>
 		<Constant Class="SequenceTrackType" Deprecated="false" Name="seqtracktype_moment" Type="Real">这是一个事件/时刻轨道。</Constant>

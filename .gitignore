@@ -6,4 +6,4 @@ credentials.properties
 /omegat/last_entry.properties
 /*.tmx
 /dictionary
-/other/.zip
+/other/*.zip
